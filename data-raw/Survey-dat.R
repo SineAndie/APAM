@@ -67,4 +67,6 @@ indices <- indices %>%
 
 index <- indices %>% mutate(is_year = as.numeric(indices$surv_year)-1)
 
-usethis::use_data(index, overwrite = TRUE)
+load("R/sysdata.rda")
+
+usethis::use_data(matur.mat,cw.mat,crl.mat, land, index,internal=T,overwrite = T)

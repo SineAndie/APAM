@@ -32,5 +32,7 @@ for(i in length(unique(weights$age)):1){
 
 sw.mat <- as.data.frame(sw.temp[,age])
 
-usethis::use_data(sw.mat, overwrite = TRUE)
+load("R/sysdata.rda")
+
+usethis::use_data(matur.mat,cw.mat,crl.mat, land, index,sw.mat,internal=T,overwrite = T)
 

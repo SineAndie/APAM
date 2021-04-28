@@ -11,8 +11,7 @@ make.tmb.data(
   M.matrix = NULL,
   C.bounds = NULL,
   sdL = NULL,
-  d = NULL,
-  SS = T
+  d = NULL
 )
 }
 \arguments{
@@ -24,11 +23,11 @@ make.tmb.data(
 
 \item{M.matrix}{can redefine M input matrix;}
 
+\item{C.bounds}{defines landings upper bounds; default uncertainty(high=2,low = 1.2, moderate=1.5)}
+
 \item{sdL}{default landings sd fixed at 0.05;}
 
 \item{d}{matrix of 0s; can be changed for influence diagnostics}
-
-\item{C.bound}{defines landings upper bounds; default uncertainty(high=2,low = 1.2, moderate=1.5)}
 }
 \description{
 Prepares data for use in APAM

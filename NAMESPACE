@@ -2,3 +2,5 @@
 
 export("%>%")
 importFrom(magrittr,"%>%")
+importFrom(rlang,.data)
+useDynLib(APAM)

@@ -20,4 +20,6 @@ pi_ya <- p_ya[1:(pA-1),]/(pya_sum)
 x_ya <- log(pi_ya/(1-pi_ya))
 crl.mat  <- t(x_ya)
 
-usethis::use_data(crl.mat,land, overwrite = TRUE)
+load("R/sysdata.rda")
+
+usethis::use_data(matur.mat,cw.mat,crl.mat, land, internal=T,overwrite = T)

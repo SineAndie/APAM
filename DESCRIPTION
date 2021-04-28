@@ -19,4 +19,13 @@ Depends:
     R (>= 2.10)
 Imports: 
     dplyr,
-    magrittr
+    rlang,
+    magrittr,
+    TMB,
+    Rcpp,
+    stats,
+    numDeriv
+LinkingTo: 
+    Rcpp,
+    TMB,
+    RcppEigen
