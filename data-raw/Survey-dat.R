@@ -1,4 +1,3 @@
-library(usethis)
 library(tidyverse)
 
 #define ages/years for assessment
@@ -52,8 +51,8 @@ SS.vec<- NULL
 iyear <- as.numeric(factor(assess.year))-1
 iage <- as.numeric(factor(age))-1
 
-indices <- dplyr::bind_rows(FRV.vec,SRV.vec,SS.vec)%>%
-  dplyr::mutate(fs = if_else(survey=="Fall",(10.5/12),(5.5/12))) %>%
+indices <- bind_rows(FRV.vec,SRV.vec,SS.vec)%>%
+  mutate(fs = if_else(survey=="Fall",(10.5/12),(5.5/12))) %>%
   mutate(Age= as.numeric(factor(Age, levels = paste('Age',1:15,sep=""))))
 
 indices <- indices %>%
@@ -66,6 +65,6 @@ indices <- indices %>%
   mutate(isd = as.numeric(indices$surv_age)-1,
          surv_year = as.factor(paste(indices$survey,"_",indices$Year,sep='')))
 
-indices <- indices %>% mutate(is_year = as.numeric(indices$surv_year)-1)
+index <- indices %>% mutate(is_year = as.numeric(indices$surv_year)-1)
 
-usethis::use_data(indices, overwrite = TRUE)
+usethis::use_data(index, overwrite = TRUE)
