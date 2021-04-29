@@ -6,14 +6,14 @@
 #' @param data input from make_tmb_data
 #' @param map input from make_map
 #' @param parms can redefine starting parameter values
-#' @param parmL can redefinie lower parameter bound
-#' @param parmU can redefinie upper parameter bound
+#' @param parmsL can redefine lower parameter bound
+#' @param parmsU can redefine upper parameter bound
 #' @param no.pe  turn on/off pe, i.e fix pe sd to 0.01
 #' @param no.logits turn on/off logits
 #' @param no.Flogits turn on/off Flogit estimation
 
 
-make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.logits=F,no.Flogits=F){
+make.parm = function(data,map,parms=NULL, parmsL=NULL, parmsU=NULL, no.pe=F,no.logits=F,no.Flogits=F){
 
   #define variables
   Y<-data$Y
@@ -56,7 +56,7 @@ make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.log
   if(no.pe){parms$log_std_pe <- matrix(log(0.01),nrow=Y-1,ncol=A-1)}
 
   #set lower bounds
-  if(is.null(parmL)){parmL <- list(
+  if(is.null(parmsL)){parmsL <- list(
     log_R=c(-10,-10),
     m_q=matrix(-30,nrow=length(data$isurvey1), ncol = A-1),
     log_cv_index=rep(log(0.001),length(unique(data$isd))),
@@ -73,7 +73,7 @@ make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.log
   )}
 
   #set upper bounds
-  if(is.null(parmU)){parmU <- list(
+  if(is.null(parmsU)){parmsU <- list(
     log_R=c(Inf,Inf),
     m_q=matrix(Inf,nrow=length(data$isurvey1), ncol = A-1),
     log_cv_index=rep(log(5),length(unique(data$isd))),
@@ -90,7 +90,7 @@ make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.log
   )}
 
   #to set lower bounds for maps
-  tp=parmL;
+  tp=parmsL;
   tp$logit_ar_crl = NULL;
   tp$logit_ar_pe = NULL;
   tp$log_F_mean=rep(log(0.000001),length(unique(as.vector(map$log_F_mean))));
@@ -112,7 +112,7 @@ make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.log
   lower = unlist(tp);
 
   #to set upper bounds for maps
-  tp=parmU;
+  tp=parmsU;
   tp$logit_ar_crl <- NULL;
   tp$logit_ar_pe <- NULL;
   tp$log_F_mean=rep(log(10),length(unique(as.vector(map$log_F_mean))));
@@ -134,7 +134,7 @@ make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.log
 
   upper = unlist(tp);
 
-  ret = list(parms=parms,parmL=parmL,parmU=parmU,lower=lower,upper=upper)
+  ret = list(parms=parms,parmsL=parmsL,parmsU=parmsU,lower=lower,upper=upper)
 
   return(ret)
 
