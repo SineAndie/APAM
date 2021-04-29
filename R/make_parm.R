@@ -1,11 +1,11 @@
-#' Prepare parameters for APAM
+#' Prepare parms for APAM
 #'
-#' Prepares parameters for use in APAM
+#' Prepares parms for use in APAM
 #'
 #' @importFrom rlang .data
 #' @param data input from make_tmb_data
-#' @param parmap input from make_map
-#' @param parameters can redefine starting parameter values
+#' @param map input from make_map
+#' @param parms can redefine starting parameter values
 #' @param parmL can redefinie lower parameter bound
 #' @param parmU can redefinie upper parameter bound
 #' @param no.pe  turn on/off pe, i.e fix pe sd to 0.01
@@ -13,15 +13,15 @@
 #' @param no.Flogits turn on/off Flogit estimation
 
 
-make.parm = function(data,parmap,parameters=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.logits=F,no.Flogits=F){
+make.parm = function(data,map,parms=NULL, parmL=NULL, parmU=NULL, no.pe=F,no.logits=F,no.Flogits=F){
 
   #define variables
   Y<-data$Y
   A<-data$A
-  t1<- (length(unique(levels(parmap$m_q)))-8)/2
+  t1<- (length(unique(levels(map$m_q)))-8)/2
 
   #set parameter starting values
-  if(is.null(parameters)){parameters <- list(
+  if(is.null(parms)){parms <- list(
     log_R=c(10,10),
     m_q=matrix(c(rep(log(0.1),t1),rep(-30,14-t1)),nrow=length(data$isurvey1), ncol = 14,byrow=T),
     log_cv_index=rep(0.5,length(unique(data$isd))),
@@ -42,18 +42,18 @@ make.parm = function(data,parmap,parameters=NULL, parmL=NULL, parmU=NULL, no.pe=
 
   #formulation with fixed logits
   if(no.logits){
-    parameters$logit_ar_index_age <- rep(1,length(unique(data$isurvey1)))
-    parameters$logit_ar_logF <- c(3, 3, 3)
-    parameters$logit_ar_logRec <- -0.75
+    parms$logit_ar_index_age <- rep(1,length(unique(data$isurvey1)))
+    parms$logit_ar_logF <- c(3, 3, 3)
+    parms$logit_ar_logRec <- -0.75
   }
 
   #formulation with fixed Flogits
   if(no.Flogits){
-    parameters$logit_ar_logF <- c(3, 3, 3)
+    parms$logit_ar_logF <- c(3, 3, 3)
   }
 
   #formulation with process error turned off
-  if(no.pe){parameters$log_std_pe <- matrix(log(0.01),nrow=Y-1,ncol=A-1)}
+  if(no.pe){parms$log_std_pe <- matrix(log(0.01),nrow=Y-1,ncol=A-1)}
 
   #set lower bounds
   if(is.null(parmL)){parmL <- list(
@@ -93,12 +93,12 @@ make.parm = function(data,parmap,parameters=NULL, parmL=NULL, parmU=NULL, no.pe=
   tp=parmL;
   tp$logit_ar_crl = NULL;
   tp$logit_ar_pe = NULL;
-  tp$log_F_mean=rep(log(0.000001),length(unique(as.vector(parmap$log_F_mean))));
-  tp$log_std_log_F=rep(-Inf,length(unique(parmap$log_std_log_F)));
-  tp$log_cv_index=rep(-Inf,length(unique(parmap$log_cv_index)));
-  tp$m_q=rep(-30,length(unique(parmap$m_q))-1);
-  tp$log_std_crl=rep(log(0.001),length(unique(parmap$log_std_crl)));
-  tp$log_std_pe=rep(log(0.001),length(unique(parmap$log_std_pe)));
+  tp$log_F_mean=rep(log(0.000001),length(unique(as.vector(map$log_F_mean))));
+  tp$log_std_log_F=rep(-Inf,length(unique(map$log_std_log_F)));
+  tp$log_cv_index=rep(-Inf,length(unique(map$log_cv_index)));
+  tp$m_q=rep(-30,length(unique(map$m_q))-1);
+  tp$log_std_crl=rep(log(0.001),length(unique(map$log_std_crl)));
+  tp$log_std_pe=rep(log(0.001),length(unique(map$log_std_pe)));
 
   if(no.logits){tp$logit_ar_index_age<- NULL;
   tp$logit_ar_logF  <- NULL;
@@ -115,12 +115,12 @@ make.parm = function(data,parmap,parameters=NULL, parmL=NULL, parmU=NULL, no.pe=
   tp=parmU;
   tp$logit_ar_crl <- NULL;
   tp$logit_ar_pe <- NULL;
-  tp$log_F_mean=rep(log(10),length(unique(as.vector(parmap$log_F_mean))));
-  tp$log_std_log_F=rep(log(5),length(unique(parmap$log_std_log_F)));
-  tp$log_cv_index=rep(log(5),length(unique(parmap$log_cv_index)));
-  tp$m_q=rep(Inf,length(unique(parmap$m_q))-1);
-  tp$log_std_crl=rep(log(10),length(unique(parmap$log_std_crl)));
-  tp$log_std_pe=rep(log(10),length(unique(parmap$log_std_pe)));
+  tp$log_F_mean=rep(log(10),length(unique(as.vector(map$log_F_mean))));
+  tp$log_std_log_F=rep(log(5),length(unique(map$log_std_log_F)));
+  tp$log_cv_index=rep(log(5),length(unique(map$log_cv_index)));
+  tp$m_q=rep(Inf,length(unique(map$m_q))-1);
+  tp$log_std_crl=rep(log(10),length(unique(map$log_std_crl)));
+  tp$log_std_pe=rep(log(10),length(unique(map$log_std_pe)));
 
 
 
@@ -134,7 +134,7 @@ make.parm = function(data,parmap,parameters=NULL, parmL=NULL, parmU=NULL, no.pe=
 
   upper = unlist(tp);
 
-  ret = list(parameters=parameters,parmL=parmL,parmU=parmU,lower=lower,upper=upper)
+  ret = list(parms=parms,parmL=parmL,parmU=parmU,lower=lower,upper=upper)
 
   return(ret)
 
