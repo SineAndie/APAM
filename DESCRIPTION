@@ -1,5 +1,5 @@
 Package: APAM
-Title: What the Package Does (One Line, Title Case)
+Title: APAM: American plaice assessment model 
 Version: 0.0.0.9000
 Authors@R: c( 
     person(given = "Andrea",
@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = "Noel",
            family = "Cadigan",
            role = "aut"))
-Description: What the package does (one paragraph).
+Description: APAM is an age-based state-space stock assessment model developed for American plaice in NAFO divisions 3LNO. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -24,7 +24,9 @@ Imports:
     TMB,
     Rcpp,
     stats,
-    numDeriv
+    numDeriv,
+    ggplot2,
+    patchwork
 LinkingTo: 
     Rcpp,
     TMB,
