@@ -9,7 +9,9 @@
 #' @param no.pe T/F. turn on/off process errors
 #' @param no.logits T/F, turn on/off logit estimation
 #' @param no.Flogits  T/F, turn on/off Flogit estimation
-
+#' @export
+#'
+#'
 make.map = function(data, setmap=NULL,crl.block=T,no.pe=F,no.logits=F,no.Flogits=F){
 
 
@@ -74,7 +76,9 @@ make.map = function(data, setmap=NULL,crl.block=T,no.pe=F,no.logits=F,no.Flogits
     log_std_crl = factor(map_crl_vec),
     log_std_pe = factor(map_std_pe),
     m_q = factor(map_q),
-    h = factor(NA)
+    h = factor(NA),
+    resid_index_res  = factor(rep(NA, length(data$index))),
+    resid_crl_res = factor(matrix(NA, nrow = 58, ncol = 10))
 
   )
 

@@ -2,14 +2,14 @@
 % Please edit documentation in R/make_parm.R
 \name{make.parm}
 \alias{make.parm}
-\title{Prepare parameters for APAM}
+\title{Prepare parms for APAM}
 \usage{
 make.parm(
   data,
-  parmap,
-  parameters = NULL,
-  parmL = NULL,
-  parmU = NULL,
+  map,
+  parms = NULL,
+  parmsL = NULL,
+  parmsU = NULL,
   no.pe = F,
   no.logits = F,
   no.Flogits = F
@@ -18,13 +18,13 @@ make.parm(
 \arguments{
 \item{data}{input from make_tmb_data}
 
-\item{parmap}{input from make_map}
+\item{map}{input from make_map}
 
-\item{parameters}{can redefine starting parameter values}
+\item{parms}{can redefine starting parameter values}
 
-\item{parmL}{can redefinie lower parameter bound}
+\item{parmsL}{can redefine lower parameter bound}
 
-\item{parmU}{can redefinie upper parameter bound}
+\item{parmsU}{can redefine upper parameter bound}
 
 \item{no.pe}{turn on/off pe, i.e fix pe sd to 0.01}
 
@@ -33,5 +33,5 @@ make.parm(
 \item{no.Flogits}{turn on/off Flogit estimation}
 }
 \description{
-Prepares parameters for use in APAM
+Prepares parms for use in APAM
 }

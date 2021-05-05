@@ -10,7 +10,9 @@
 #' @param C.bounds defines landings upper bounds; default uncertainty(high=2,low = 1.2, moderate=1.5)
 #' @param sdL  default landings sd fixed at 0.05;
 #' @param d matrix of 0s; can be changed for influence diagnostics
-
+#' @export
+#'
+#'
 make.tmb.data = function(do.retro=FALSE,retro.year=NULL,M.split=TRUE,M.matrix=NULL,
                          C.bounds=NULL,sdL=NULL,d=NULL){
 
@@ -95,6 +97,7 @@ make.tmb.data = function(do.retro=FALSE,retro.year=NULL,M.split=TRUE,M.matrix=NU
 
   #for profile likelihoods (full model if all = 1)
   tmb_data$nll_wt = rep(1,5)
+  tmb_data$resid=0
 
   return(tmb_data)
 

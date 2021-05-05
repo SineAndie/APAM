@@ -11,8 +11,8 @@
 #' @param no.pe  turn on/off pe, i.e fix pe sd to 0.01
 #' @param no.logits turn on/off logits
 #' @param no.Flogits turn on/off Flogit estimation
-
-
+#' @export
+#'
 make.parm = function(data,map,parms=NULL, parmsL=NULL, parmsU=NULL, no.pe=F,no.logits=F,no.Flogits=F){
 
   #define variables
@@ -133,6 +133,9 @@ make.parm = function(data,map,parms=NULL, parmsL=NULL, parmsU=NULL, no.pe=F,no.l
   if(no.pe){tp$log_std_pe<-NULL;}
 
   upper = unlist(tp);
+
+  parms$resid_index_res <- rep(0, length(data$index))
+  parms$resid_crl_res  <- matrix(0, nrow = 58, ncol = 10)
 
   ret = list(parms=parms,parmsL=parmsL,parmsU=parmsU,lower=lower,upper=upper)
 

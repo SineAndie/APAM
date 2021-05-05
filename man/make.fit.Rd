@@ -6,8 +6,8 @@
 \usage{
 make.fit(
   data,
-  parmap,
-  params,
+  map,
+  parameters,
   do.sd = TRUE,
   do.Zresid = TRUE,
   do.NS = TRUE,
@@ -18,9 +18,9 @@ make.fit(
 \arguments{
 \item{data}{input from make_tmb_data}
 
-\item{parmap}{input from make_map}
+\item{map}{input from make_map}
 
-\item{params}{input from make_parameters}
+\item{parameters}{input from make_parameters}
 
 \item{do.sd}{get sdreport}
 
@@ -30,7 +30,7 @@ make.fit(
 
 \item{do.hess}{calculate hessian}
 
-\item{NS}{defualt 4 extra Newton step}
+\item{NS}{default 4 extra Newton step}
 }
 \description{
 Prepares parameters for use in APAM
