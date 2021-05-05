@@ -1,7 +1,7 @@
 #define TMB_LIB_INIT R_init_APAM
 
 #include <TMB.hpp>
-#include "pnorm4.hpp" //Atomic functions for censored likelihoods
+#include "pnorm4.h" //Atomic functions for censored likelihoods
 #include <iostream>
 
 
@@ -37,9 +37,10 @@ template<class Type>
     DATA_SCALAR(std_log_landings);
     DATA_VECTOR(log_lowerM);
     DATA_VECTOR(log_upperM);
-	  DATA_VECTOR(d);
-	  DATA_VECTOR(nll_wt);
-
+	DATA_VECTOR(d);
+	DATA_VECTOR(nll_wt);
+	DATA_INTEGER(resid);
+	
     int n = index.size();
     Type one = 1.0;
     Type zero = 0.0;
@@ -65,7 +66,11 @@ template<class Type>
 
   //to use when calculating local influence
 	PARAMETER(h);
-
+	
+  //for Z residuals
+	PARAMETER_VECTOR(resid_index_res);
+  	PARAMETER_MATRIX(resid_crl_res)
+	
     array<Type> log_F_dev = log_F_devt.transpose();
     array<Type> log_N = log_Nt.transpose();
 
@@ -236,7 +241,8 @@ template<class Type>
     for(int i = 0;i<Y;i++){
       for(int j = 0;j<A-5;j++){
         pred_crl(i,j)= log(pi_ya(j,i)/(one - pi_ya(j,i)));
-        resid_crl(i,j) = crl(i,j) - pred_crl(i,j);
+        if(resid==0){resid_crl(i,j) = crl(i,j) - pred_crl(i,j);}
+		if(resid==1){resid_crl(i,j) = resid_crl_res(i,j);}
         std_resid_crl(i,j) = resid_crl(i,j)/std_crl(i,j);}}
 
  //Survey index predictions, and residuals;
@@ -292,7 +298,8 @@ template<class Type>
     Elog_index(i) = q(iy1,ia)  + log_N(iy,ia) - fs(i)*Z(iy,ia);
     Eindex(i) = exp(Elog_index(i));
     std_index_vec(i) = cv_index(is)*Eindex(i);
-    resid_index(i) = index(i) - Eindex(i);
+    if(resid==0){resid_index(i) = index(i) - Eindex(i);}
+	if(resid==1){resid_index(i) = resid_index_res(i);}
     std_resid_index(i) = resid_index(i)/std_index_vec(i);
 
     mresid_index(iy1,ia) = resid_index(i);
@@ -339,7 +346,8 @@ template<class Type>
     jnll(4) = jnll(4)*nll_wt(4);
     nll += jnll(4);
    //PROCESS MODEL
-
+  
+  if(resid==0){
   //Log recruitS;
    jnll(5) += SCALE(AR1(ar_logRec),std_log_R)(log_Rec_dev);
 
@@ -504,6 +512,10 @@ template<class Type>
 	ADREPORT(ar_crl_age);
 	ADREPORT(ssb);
 	ADREPORT(aveF_914);
-
+	}
+	if(resid==1){    
+	ADREPORT(resid_index);
+    ADREPORT(resid_crl);}
+	
   return nll;
   }
