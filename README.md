@@ -30,6 +30,7 @@ testing soon!
 The latest version can be installed via:
 
 ``` r
+library(devtools)
 devtools::install_github("SineAndie/APAM", dependencies=TRUE)
 ```
 
