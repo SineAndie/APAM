@@ -18,11 +18,10 @@ RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
 Imports: 
+    TMB,
     dplyr,
     rlang,
     magrittr,
-    TMB,
-    Rcpp,
     stats,
     numDeriv,
     ggplot2,
@@ -30,7 +29,8 @@ Imports:
     reshape2,
     stringr,
     cowplot
+Remotes: 
+    kaskr/adcomp/TMB
 LinkingTo: 
-    Rcpp,
     TMB,
     RcppEigen

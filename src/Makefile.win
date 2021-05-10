@@ -1,0 +1,7 @@
+all: APAM.dll
+	# Comment here preserves the prior tab
+APAM.dll: APAM.cpp
+	Rscript --vanilla -e "TMB::compile('APAM.cpp', '-O1 -g',DLLFLAGS='', CPPFLAGS='-Wno-ignored-attributes')"
+
+clean:
+	rm -rf *.dll
