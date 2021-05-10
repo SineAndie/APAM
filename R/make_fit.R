@@ -12,16 +12,16 @@
 #' @param do.hess (optional) calculate hessian? Default = \code{TRUE}.
 #' @param NS (optional) positive integer, set numer of Newton setps. Default = 4.
 
-#'@return a fit TMB model with additional output:
+#'@return returns a list containing:
 #'   \describe{
 #'     \item{\code{$obj}}{object from \code{TMB::MakeADFun}}
 #'     \item{\code{$opt}}{results from \code{stats::nlminb}}
 #'     \item{\code{$rep}}{report from \code{obj$report()} from \code{MakeADFun}}
 #'     \item{\code{$sdrep}}{if \code{do.sd=T} returns sdreport from \code{MakeADFun}}
 #'     \item{\code{$sdrep1}}{if \code{do.Zresid=T} returns sdreport from residuals from \code{MakeADFun}}
-#'     \item{\code{$tmb.data}}{object from \code{\link{make.tmb.data} that was used in the model}}
-#'     \item{\code{$map}}{object from \code{\link{make.map} that was used in the model}}
-#'     \item{\code{$parameters}}{object from \code{\link{make.parm} that was used in the model}}
+#'     \item{\code{$tmb.data}}{object from \code{\link{make.tmb.data}} that was used in the model}
+#'     \item{\code{$map}}{object from \code{\link{make.map}} that was used in the model}
+#'     \item{\code{$parameters}}{object from \code{\link{make.parm}} that was used in the model}
 #'     \item{\code{$hess}}{if \code{do.hess=T} returns hessian}
 #'     }
 #'

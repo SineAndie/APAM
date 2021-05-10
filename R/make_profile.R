@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' profile <- make.profile(fit)
+#' profile <- make.profile(mfits)
 #' }
 #' @export
 

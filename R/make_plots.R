@@ -1,6 +1,6 @@
 #' make.plots: plot output from APAM
 #'
-#' Plot outputs from APAM.
+#' Plots output from APAM.
 #'
 #' @importFrom ggplot2 ggplot aes geom_line geom_ribbon labs theme theme_bw element_text facet_wrap
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous geom_point guides
@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' plots<- make.plots(fit)
+#' plots<- make.plots(mfits)
 #' }
 #' @export
 make.plots = function(mfits){

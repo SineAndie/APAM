@@ -4,6 +4,11 @@
 #'
 #' @param LocInf object from \code{\link{make.LI}}
 #'
+#' @return a list containing  ggplot
+#'   \describe{
+#'     \item{\code{$LI_plot}}{local influence plot}
+#'     }
+#'
 #' @examples
 #' \dontrun{
 #' LI.plots <- make.LI.plots(LocInf)
@@ -11,9 +16,8 @@
 #' @export
  make.LI.plots = function(LocInf){
 
-  Si_dat= reshape2::melt(as.matrix(LocInf$LI))
-
   if(LocInf$type=="age"){
+    Si_dat= reshape2::melt(as.matrix(LocInf$LI))
     Si_plot=    Si_dat %>%
       ggplot(aes(x= .data$Var1, y = .data$value)) +
       geom_line()+
@@ -26,12 +30,14 @@
   }
 
   if(LocInf$type=="year"){
+    rownames(LocInf$LI) = c(1960:2017)
+    Si_dat= reshape2::melt(as.matrix(LocInf$LI))
     Si_plot = Si_dat %>%
       ggplot(aes(x= .data$Var1, y = .data$value)) +
       geom_line()+
       scale_x_continuous(breaks = seq(1960,2019,8))+
       facet_wrap(~.data$Var2)+
-      labs("Total slope",x="Year")+
+      labs(y="Total slope",x="Year")+
       ggplot2::geom_hline(yintercept = 0, linetype=2)+
       theme_bw()+theme(legend.position = "none",text = element_text(size=15))
   }

@@ -1,12 +1,12 @@
 #' make.curv: calculate curvature
 #'
-#' Calculates curvature for APAM for individual, age group and year group slopes for full model fit.
+#' Calculates curvature for APAM for individual, age group and year group perturbations for full model fit.
 #' Note that this functions currently does not calculate curvature for individual
 #' data components.
 #'
 #' @param mfits object returned from \code{\link{make.fit}}
 #' @param LocInf object returned from \code{\link{make.LI}}
-#' @param pert (optional) vector, to manually set which perturbations to run. Runs all by default.
+#' @param pert  (optional) vector, to manually set which perturbations to run. Runs all by default.
 #' @param tol  to set curvature tolerance. Default \code{h=0.10}.
 #'
 #' @examples
@@ -58,19 +58,19 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
 
       tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}
 
-    par$parameters$h <- 2*tol
+    par$parms$h <- 2*tol
 
     gmax1<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    par$parameters$h <- tol
+    par$parms$h <- tol
 
     gmax2<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    par$parameters$h <- -tol
+    par$parms$h <- -tol
 
     gmin1 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    par$parameters$h <- -2*tol
+    par$parms$h <- -2*tol
 
     gmin2 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
@@ -78,7 +78,7 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
 
     dg2_dh <- temp1/(12*tol^2)
 
-    temp2<- (1+(as.numeric(LocInf$results[j,5]))^2)^(3/2)
+    temp2<- (1+(as.numeric(LocInf$LI[j,5]))^2)^(3/2)
 
     tempc <- dg2_dh/temp2
     curv[j]=tempc

@@ -6,7 +6,7 @@
 #' @param do.retro (optional) T/F, turn on/off option to change retro year? Default = \code{F}.
 #' @param retro.year  (optional) numeric, defines end year for retros if needed. Default = \code{NULL}.
 #' @param M.split  (optional) T/F, turn on/off M increase for years 1989-1996? Default = \code{T}.
-#' @param M.matrix (optional) a matrix to manually define M assumption. Default = \code{NULL} See details. .
+#' @param M.matrix (optional) a matrix to manually define M assumption. Default = \code{NULL} See details.
 #' @param C.bounds (optional) a vector to manually define landings upper bounds; Default = \code{NULL}. See details.
 #' @param sdL  (optional) a positive scalar to  manually defined landings sd ; Default = \code{NULL}.
 #' @param d (optional) a vector to turn on/off d for use in \code{make.LI()}. Default = \code{NULL}.
