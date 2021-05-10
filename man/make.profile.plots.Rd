@@ -2,13 +2,25 @@
 % Please edit documentation in R/make_profile_plots.R
 \name{make.profile.plots}
 \alias{make.profile.plots}
-\title{Plot output from \code{\link{make_profile}} object}
+\title{make.profile.plots: plot output from profile likelihoods}
 \usage{
-make.profile.plots(profile)
+make.profile.plots(prof)
 }
 \arguments{
-\item{prof}{object from \code{\link{make_profile}}}
+\item{prof}{object from \code{\link{make.profile}}}
+}
+\value{
+a list containing all ggplots
+\describe{
+\item{\code{$nll_plot}}{profile likelihoods vs M perturbations}
+\item{\code{$nll_dev_plot}}{profile likelihoods deviations vs M perturbations}
+}
 }
 \description{
-Outputs profile plots
+Plot outputs from APAM profile likelihoods
+}
+\examples{
+\dontrun{
+prof.plots<- make.profile.plots(prof)
+}
 }

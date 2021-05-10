@@ -1,18 +1,38 @@
-#' Prepare map for APAM
+#' make.map: prepares map for APAM
 #'
-#' Prepares map for use in APAM. Takes make_tmb_data object as input
+#' Prepares map for use in APAM.
+#'
+#' @param data object returned from \code{\link{make.tmb.data}}
+#' @param setmap (optional) list, can be used to change default map settings. See details.
+#' @param crl.block (optional) T/F, turn on/off crl sd split? Default = \code{T}. See details.
+#' @param no.pe (optional) T/F, turn on/off process errors? Default = \code{F}.
+#' @param no.logits (optional) T/F, turn on/off all logit estimation? Default = \code{F}.
+#' @param no.Flogits  (optional) T/F, turn on/off Flogit estimation? Default = \code{F}.
+#'
+#'@details
+#'   \describe{
+#'     \item{\code{setmap}}{list that contains parameter mapping. Default \code{setmap=}
+#'     \itemize{
+#'     \item \code{meanF= c("5","6"),}
+#'     \item \code{stdF = c("5",rep("6+",length =   data$A-5)),}
+#'     \item \code{ageFall = c("1",rep("2-11",10),rep("12-15",4)),}
+#'     \item \code{ageSpring = c("1","2",rep("3-13",11),rep("14-15",2)),}
+#'     \item \code{ageSpanish = NULL,}
+#'     \item \code{stdcrl  = c(rep("5-6",2),rep("7-11",5),rep("12-14",3)),}
+#'     \item \code{stdpe = rep("all", data$A-1),}
+#'     \item \code{mapq = c(1:7,rep(NA,length = (data$A-1)-7))} }}
+#'     \item{\code{crl.block}}{if \code{TRUE}, a separate crl sd is estimated pre/post 1993.}
+#'     \item{\code{no.pe}}{if \code{TRUE}, sdpe is mapped out.}
+#'     \item{\code{no.logits }}{if \code{TRUE}, all logit parameters are mapped out.}
+#'     \item{\code{no.Flogits}}{if \code{TRUE}, all F logit parameters are mapped out mapped out. }}
 #'
 #'
-#' @param data make_tmb_data object
-#' @param setmap can be used to change default map
-#' @param crl.block T/F, turn on/off crl sd parm split pre/post 1990
-#' @param no.pe T/F. turn on/off process errors
-#' @param no.logits T/F, turn on/off logit estimation
-#' @param no.Flogits  T/F, turn on/off Flogit estimation
+#' @examples
+#' \dontrun{
+#' map <- make.map(data)
+#' }
 #' @export
-#'
-#'
-make.map = function(data, setmap=NULL,crl.block=T,no.pe=F,no.logits=F,no.Flogits=F){
+make.map = function(data, setmap=NULL,crl.block=TRUE,no.pe=FALSE,no.logits=FALSE,no.Flogits=FALSE){
 
 
   if(is.null(setmap)){

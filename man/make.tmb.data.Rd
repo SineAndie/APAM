@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_tmb_data.R
 \name{make.tmb.data}
 \alias{make.tmb.data}
-\title{Prepare data inputs for APAM}
+\title{make.tmb.data: prepare data inputs for APAM}
 \usage{
 make.tmb.data(
   do.retro = FALSE,
@@ -15,20 +15,36 @@ make.tmb.data(
 )
 }
 \arguments{
-\item{do.retro}{T/F, turns on/off option to do retros}
+\item{do.retro}{(optional) T/F, turn on/off option to change retro year? Default = \code{F}.}
 
-\item{retro.year}{end year for retro.}
+\item{retro.year}{(optional) numeric, defines end year for retros if needed. Default = \code{NULL}.}
 
-\item{M.split}{T/F, turns on/off M increase for years 1989-1996}
+\item{M.split}{(optional) T/F, turn on/off M increase for years 1989-1996? Default = \code{T}.}
 
-\item{M.matrix}{can redefine M input matrix;}
+\item{M.matrix}{(optional) a matrix to manually define M assumption. Default = \code{NULL} See details. .}
 
-\item{C.bounds}{defines landings upper bounds; default uncertainty(high=2,low = 1.2, moderate=1.5)}
+\item{C.bounds}{(optional) a vector to manually define landings upper bounds; Default = \code{NULL}. See details.}
 
-\item{sdL}{default landings sd fixed at 0.05;}
+\item{sdL}{(optional) a positive scalar to  manually defined landings sd ; Default = \code{NULL}.}
 
-\item{d}{matrix of 0s; can be changed for influence diagnostics}
+\item{d}{(optional) a vector to turn on/off d for use in \code{make.LI()}. Default = \code{NULL}.}
 }
 \description{
-Prepares data for use in APAM
+Prepares data for use in APAM. No inputs need to be changed to run the default model (see details).
+}
+\details{
+\describe{
+\item{\code{M.matrix}}{M.matrix has dimensions nrow=nyears and ncol=nages; M = 0.5 for ages 1-3, 0.3 for age 4 and 0.2 for ages 5+. }
+\item{\code{M.split}}{if \code{TRUE}, \code{M.matrix = M.matrix + 0.33} for years 1989-1996.}
+\item{\code{C.bounds}}{vector of length 3; Default \code{C.bounds = (2,1.2,1.5)} for high, low, and moderate uncertainty.}
+\item{\code{sdL}}{default sd landings = 0.05}
+\item{\code{d}}{Numeric vector of length(nyears*nages) of 0's. }}
+}
+\examples{
+\dontrun{
+tmb.data <- make.tmb.data()
+
+#model with no M split
+tmb.data.ns = make.tmb.data(M.split=FALSE)
+}
 }

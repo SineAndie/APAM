@@ -2,17 +2,17 @@
 % Please edit documentation in R/make_LI.R
 \name{gfunc}
 \alias{gfunc}
-\title{To calculate influence function}
+\title{gfunc: helper function to return model fit}
 \usage{
 gfunc(w, theta, mfits)
 }
 \arguments{
-\item{w}{weight for perturbation (set to 0 for null perturbation)}
+\item{w}{scalar, weight for perturbation (set to 0 for null perturbation)}
 
-\item{theta}{vector of fixed effects}
+\item{theta}{vector of fixed effect parameters}
 
-\item{mfits}{object from make_fit}
+\item{mfits}{object returned from \code{\link{make.fit}}}
 }
 \description{
-To calculate influence function
+Influence function for local influence diagnostics.
 }

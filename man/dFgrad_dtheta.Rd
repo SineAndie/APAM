@@ -2,18 +2,17 @@
 % Please edit documentation in R/make_LI.R
 \name{dFgrad_dtheta}
 \alias{dFgrad_dtheta}
-\title{Helper functions for local influence diagnostics}
+\title{dFgrad_dtheta: helper function for local influence diagnostics}
 \usage{
 dFgrad_dtheta(w, i, mfits)
 }
 \arguments{
-\item{w}{weight for perturbation (set to 0 for null perturbation)}
+\item{w}{scalar, weight for perturbation (set to 0 for null perturbation).}
 
-\item{i}{inidcator for observation weight}
+\item{i}{indicator for observation weight \code{1=on, 0 =off}.}
 
-\item{mfits}{object from make_fit}
+\item{mfits}{object returned from \code{\link{make.fit}}}
 }
 \description{
-#function to compute Del in Eq. 22 of Perreault & Cadigan
-#'@useDynLib APAM
+Helper function function to compute Del in Eq. 22 of Perreault & Cadigan (2021).
 }

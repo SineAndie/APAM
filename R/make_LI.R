@@ -1,11 +1,11 @@
-#' Helper functions for local influence diagnostics
+#' dFgrad_dtheta: helper function for local influence diagnostics
 #'
-#' #function to compute Del in Eq. 22 of Perreault & Cadigan
-#'#'@useDynLib APAM
+#' Helper function function to compute Del in Eq. 22 of Perreault & Cadigan (2021).
+#' @useDynLib APAM
 #'
-#' @param w weight for perturbation (set to 0 for null perturbation)
-#' @param i inidcator for observation weight
-#' @param mfits object from make_fit
+#' @param w scalar, weight for perturbation (set to 0 for null perturbation).
+#' @param i indicator for observation weight \code{1=on, 0 =off}.
+#' @param mfits object returned from \code{\link{make.fit}}
 #'
 dFgrad_dtheta = function(w,i,mfits){
   mfits$tmb.data$d[i] <- 1
@@ -19,11 +19,12 @@ dFgrad_dtheta = function(w,i,mfits){
 }
 
 
-#Del for slopes across ages
+#' dFgrad_dtheta_age: helper function for local influence diagnostics
 #'
-#' @param w weight for perturbation (set to 0 for null perturbation)
-#' @param i inidcator for observation weight
-#' @param mfits object from make_fit
+#' Helper function function to compute Del in Eq. 22 of Perreault & Cadigan (2021).
+#' @param w scalar, weight for perturbation (set to 0 for null perturbation).
+#' @param i indicator for observation weight \code{1=on, 0 =off}.
+#' @param mfits object returned from \code{\link{make.fit}}
 #'
 dFgrad_dtheta_age = function(w,i,mfits){
   param <- mfits$obj$env$parList(mfits$opt$par)
@@ -39,11 +40,12 @@ dFgrad_dtheta_age = function(w,i,mfits){
   return(obj$gr(obj$par))
 }
 
-#Del for slopes across years
+#' dFgrad_dtheta_year: helper function for local influence diagnostics
 #'
-#' @param w weight for perturbation (set to 0 for null perturbation)
-#' @param i inidcator for observation weight
-#' @param mfits object from make_fit
+#' Helper function function to compute Del in Eq. 22 of Perreault & Cadigan (2021)
+#' @param w scalar, weight for perturbation (set to 0 for null perturbation).
+#' @param i indicator for observation weight \code{1=on, 0 =off}.
+#' @param mfits object returned from \code{\link{make.fit}}
 #'
 dFgrad_dtheta_year = function(w,i,mfits){
   param <-  mfits$obj$env$parList(mfits$opt$par)
@@ -59,35 +61,43 @@ dFgrad_dtheta_year = function(w,i,mfits){
   return(obj$gr(obj$par))
 }
 
-#'To calculate influence function
+#'gfunc: helper function to return model fit
 #'
-#' @param w weight for perturbation (set to 0 for null perturbation)
-#' @param theta vector of fixed effects
-#' @param mfits object from make_fit
+#' Influence function for local influence diagnostics.
+#' @param w scalar, weight for perturbation (set to 0 for null perturbation)
+#' @param theta vector of fixed effect parameters
+#' @param mfits object returned from \code{\link{make.fit}}
 #'
-#influence function
 gfunc = function(w, theta,mfits){
   param <- mfits$obj$env$parList(theta)
   param$h <- w
 
-  obj <- TMB::MakeADFun(mfits$tmb.data,param,mfits$parmap,
+  obj <- TMB::MakeADFun(mfits$tmb.data,param,mfits$map,
                         random=mfits$obj$env$random, DLL = mfits$obj$env$DLL,
                         inner.control=list(maxit=100,trace=F),silent=T)
   return(obj$fn(obj$par))
 }
-#' To run local influence diagnostics for individual data components
+
+#'make.LI: run local influence diagnostics for APAM.
 #'
-#' @param mfits object from make_fit
-#' @param pert define which perturbations to run; default=all (for all ages/years)
-#' @param full if running for data source, need to specify full model fit for Del calculation
-#' @param all  to run individual perturbations
-#' @param age to run age group perturbations
-#' @param year tp run year group perturbations
+#' To run local influence diagnostics for full model and individual data components.
+#' @param mfits object returned from \code{\link{make.fit}}
+#' @param pert (optional) vector, to manually set which perturbations to run. Runs all by default. See details.
+#' @param all  T/F, to run individual (i.e. age and year) perturbations. Default = \code{TRUE}.
+#' @param age T/F, to run age group perturbations. Default = \code{FALSE}.
+#' @param year T/F, to run year group perturbations. Default = \code{FALSE}.
+#' @export
+#' @examples
+#' \dontrun{
+#' LI <- make.LI(fit)
+#'
+#' #to run age group perturbations
+#' LI_age <- make.LI(fit,age=T)
+#' }
 #' @export
 
-make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
+make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
-  full<-mfits
   tmb_data <- mfits$tmb.data
 
   n <- length(tmb_data$d)
@@ -98,35 +108,42 @@ make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
   t1 <- (length(unique(levels(mfits$parmap$m_q)))-8)/2
 
   if(age){if(is.null(pert)){pert <- c(1:A)}
-    all=FALSE}
+    all=FALSE
+    type="age"}
   if(year){if(is.null(pert)){pert <- c(1:Y)}
-    all=FALSE}
-  if(all){if(is.null(pert)){pert <-c(1:n)} else{LI.plot=F}}
+    all=FALSE
+    type='year'}
+  if(all){if(is.null(pert)){pert <-c(1:n)} else{LI.plot=F}
+    type="all"}
 
-  LI_temp<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)+1))
-  colnames(LI_temp) <- c("noFall", "noSpan", "noSpring","noland","agecomp","full")
+  LI_temp<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
 
-  LI<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)+1))
-  colnames(LI) <- c("Fall", "Span", "Spring","land","agecomp","full")
+  LI<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
+  colnames(LI) <- c("Fall", "Spring","Landings","Age Comps","Full")
+  rownames(LI) <- pert
 
-  for(i in 1:(length(mfits$tmb.data$nll_wt)+1)){
+for(i in 1:length(tmb_data$nll_wt)){
+ if(all){i=5}
+  tmb_data$nll_wt = rep(1,5)
 
-    if(i<5){  tmb_data$nll_wt[i]=0}
-    if(i==5){ tmb_data$nll_wt = rep(0,5)
-    tmb_data$nll_wt[i]=1}
-    if(i==6){ tmb_data$nll_wt = rep(1,5)}
+  if(i<3){  tmb_data$nll_wt[i]=0}
+
+  if(i==3){  tmb_data$nll_wt[i+1]=0}
+
+  if(i==4){ tmb_data$nll_wt = rep(0,5)
+    tmb_data$nll_wt[i+1]=1}
 
   #containers
   Si = vector("list", length(pert))
+
   for(j in 1:length(pert)){
 
     if(all){
       tmb_data$d <- as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
       tmb_data$d[pert[j]] <- 1
 
-      if(is.null(full)){full<-mfits}
       dFtimeFn = function(num){
-        return(numDeriv::jacobian(dFgrad_dtheta,0,,,,num,full))
+        return(numDeriv::jacobian(dFgrad_dtheta,0,,,,num,mfits))
       }}
 
     if(age){
@@ -136,9 +153,8 @@ make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
 
       tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)
 
-      if(is.null(full)){full<-mfits}
       dFtimeFn = function(num){
-        return(numDeriv::jacobian(dFgrad_dtheta_age,0,,,,num,full))
+        return(numDeriv::jacobian(dFgrad_dtheta_age,0,,,,num,mfits))
       }}
 
     if(year){
@@ -148,9 +164,8 @@ make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
 
       tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)
 
-      if(is.null(full)){full<-mfits}
       dFtimeFn = function(num){
-        return(numDeriv::jacobian(dFgrad_dtheta_year,0,,,,num,full))
+        return(numDeriv::jacobian(dFgrad_dtheta_year,0,,,,num,mfits))
       }}
 
     Del <- t(sapply(pert[j],dFtimeFn))
@@ -175,13 +190,13 @@ make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
     )
 
     obj2 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),map2,
-                      random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
+                           random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
 
     dg_dw <- as.matrix(obj2$gr())
 
     #dg_dtheta
     obj3 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),mfits$map,
-                      random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
+                           random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
 
     dg_dtheta <- as.matrix(obj3$gr())
 
@@ -192,9 +207,9 @@ make.LI = function(mfits,pert=NULL,full=NULL,all=TRUE,age=FALSE,year=FALSE){
   }
   LI_temp[,i] <- unlist(Si)
 }
-  LI[,1:4] = LI_temp[,6] - LI_temp[,1:4]
-  LI[,5:6] = LI_temp[,5:6]
-  return(LI)
+  LI[,1:3] = LI_temp[,5] - LI_temp[,1:3]
+  LI[,4:5] = LI_temp[,4:5]
+  return(results = list(LI=LI, type = type))
 
 }
 

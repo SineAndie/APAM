@@ -26,7 +26,10 @@ Imports:
     stats,
     numDeriv,
     ggplot2,
-    patchwork
+    patchwork,
+    reshape2,
+    stringr,
+    cowplot
 LinkingTo: 
     Rcpp,
     TMB,

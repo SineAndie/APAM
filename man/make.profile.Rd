@@ -2,15 +2,37 @@
 % Please edit documentation in R/make_profile.R
 \name{make.profile}
 \alias{make.profile}
-\title{calculate profile likelihoods from Perreault & Cadigan 2021}
+\title{make.profile: calculate profile likelihoods}
 \usage{
 make.profile(mfits, delta_M = NULL)
 }
 \arguments{
-\item{mfits}{input from make_fit}
+\item{mfits}{object returned from \code{\link{make.fit}}}
 
-\item{delta_M}{to manually define delta M; default delta_M <- seq(-0.15,0.40, by = 0.01)}
+\item{delta_M}{(optional) vector, to manually set range of M perturbations. Default \code{delta_M <- seq(-0.15,0.40, by = 0.01)}.}
+}
+\value{
+Returns marginal profile for age composition data and remainder/conditional for
+surveys and landings data. Additionally, components from the joint negative log-likelihood
+are also returned.
+\describe{
+\item{\code{$conditional}}{conditional profile likelihoods for surveys and landings data}
+\item{\code{$remainder}}{remainder profile likelihoods for surveys and landings data}
+\item{\code{$marginal}}{marginal profile likelihoods for age composition data}
+\item{\code{$conditional_dev}}{conditional profile likelihood deviations for surveys and landings data}
+\item{\code{$remainder_dev}}{remainder profile likelihood deviations for surveys and landings data}
+\item{\code{$marginal_dev}}{marginal profile likelihood deviationsfor age composition data}
+\item{\code{$joint}}{joint profile likelihoods for all data components}
+\item{\code{$joint_dev}}{joint profile likelihood deviations for all data components}
+\item{\code{$conv_fit}}{returns max inner and outer gradients for M perturbed model fit and convergence message from optimization}
+\item{\code{$no.gr2}}{returns perturbation number and error message if error is returned during netwon steps}
+}
 }
 \description{
-Calculate profile likelihoods
+Calculates profile likelihoods for APAM for individual data components.
+}
+\examples{
+\dontrun{
+profile <- make.profile(fit)
+}
 }

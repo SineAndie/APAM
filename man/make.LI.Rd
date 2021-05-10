@@ -2,23 +2,29 @@
 % Please edit documentation in R/make_LI.R
 \name{make.LI}
 \alias{make.LI}
-\title{To run local influence diagnostics for individual data components}
+\title{make.LI: run local influence diagnostics for APAM.}
 \usage{
-make.LI(mfits, pert = NULL, full = NULL, all = TRUE, age = FALSE, year = FALSE)
+make.LI(mfits, pert = NULL, all = TRUE, age = FALSE, year = FALSE)
 }
 \arguments{
-\item{mfits}{object from make_fit}
+\item{mfits}{object returned from \code{\link{make.fit}}}
 
-\item{pert}{define which perturbations to run; default=all (for all ages/years)}
+\item{pert}{(optional) vector, to manually set which perturbations to run. Runs all by default. See details.}
 
-\item{full}{if running for data source, need to specify full model fit for Del calculation}
+\item{all}{T/F, to run individual (i.e. age and year) perturbations. Default = \code{TRUE}.}
 
-\item{all}{to run individual perturbations}
+\item{age}{T/F, to run age group perturbations. Default = \code{FALSE}.}
 
-\item{age}{to run age group perturbations}
-
-\item{year}{tp run year group perturbations}
+\item{year}{T/F, to run year group perturbations. Default = \code{FALSE}.}
 }
 \description{
-To run local influence diagnostics for individual data components
+To run local influence diagnostics for full model and individual data components.
+}
+\examples{
+\dontrun{
+LI <- make.LI(fit)
+
+#to run age group perturbations
+LI_age <- make.LI(fit,age=T)
+}
 }

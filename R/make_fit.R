@@ -1,19 +1,36 @@
-#' Prepare parameters for APAM
+#' make.fit: fit APAM
 #'
-#' Prepares parameters for use in APAM
+#' Fits American plaice assessment model (APAM).
 #'@useDynLib APAM
 #'
-#' @importFrom rlang .data
-#' @param data input from make_tmb_data
-#' @param map input from make_map
-#' @param parameters input from make_parameters
-#' @param do.sd get sdreport
-#' @param do.Zresid get Z residuals
-#' @param do.NS  run extra Newton steps (default 4)
-#' @param do.hess calculate hessian
-#' @param NS default 4 extra Newton step
-#' @export
+#' @param data object returned from \code{\link{make.tmb.data}}
+#' @param map object returned from \code{\link{make.map}}
+#' @param parameters object returned from \code{\link{make.parm}}
+#' @param do.sd (optional) T/F, run sdreport? Default = \code{TRUE}.
+#' @param do.Zresid (optional) T/F, get adjusted residuals? Default = \code{TRUE}.
+#' @param do.NS  (optional) T/F, do extra Newton steps? Default = \code{TRUE}.
+#' @param do.hess (optional) calculate hessian? Default = \code{TRUE}.
+#' @param NS (optional) positive integer, set numer of Newton setps. Default = 4.
+
+#'@return a fit TMB model with additional output:
+#'   \describe{
+#'     \item{\code{$obj}}{object from \code{TMB::MakeADFun}}
+#'     \item{\code{$opt}}{results from \code{stats::nlminb}}
+#'     \item{\code{$rep}}{report from \code{obj$report()} from \code{MakeADFun}}
+#'     \item{\code{$sdrep}}{if \code{do.sd=T} returns sdreport from \code{MakeADFun}}
+#'     \item{\code{$sdrep1}}{if \code{do.Zresid=T} returns sdreport from residuals from \code{MakeADFun}}
+#'     \item{\code{$tmb.data}}{object from \code{\link{make.tmb.data} that was used in the model}}
+#'     \item{\code{$map}}{object from \code{\link{make.map} that was used in the model}}
+#'     \item{\code{$parameters}}{object from \code{\link{make.parm} that was used in the model}}
+#'     \item{\code{$hess}}{if \code{do.hess=T} returns hessian}
+#'     }
 #'
+#' @examples
+#' \dontrun{
+#' fit <- make.fit(data, map, parameters)
+#' }
+#' @export
+
 make.fit = function(data,map,parameters,do.sd=TRUE,do.Zresid=TRUE,do.NS=TRUE,do.hess=FALSE,NS=4){
 
   #fit model

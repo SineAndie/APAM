@@ -1,18 +1,34 @@
-#' Prepare data inputs for APAM
+#' make.tmb.data: prepare data inputs for APAM
 #'
-#' Prepares data for use in APAM
+#' Prepares data for use in APAM. No inputs need to be changed to run the default model (see details).
 #'
 #' @importFrom rlang .data
-#' @param do.retro T/F, turns on/off option to do retros
-#' @param retro.year end year for retro.
-#' @param M.split T/F, turns on/off M increase for years 1989-1996
-#' @param M.matrix can redefine M input matrix;
-#' @param C.bounds defines landings upper bounds; default uncertainty(high=2,low = 1.2, moderate=1.5)
-#' @param sdL  default landings sd fixed at 0.05;
-#' @param d matrix of 0s; can be changed for influence diagnostics
+#' @param do.retro (optional) T/F, turn on/off option to change retro year? Default = \code{F}.
+#' @param retro.year  (optional) numeric, defines end year for retros if needed. Default = \code{NULL}.
+#' @param M.split  (optional) T/F, turn on/off M increase for years 1989-1996? Default = \code{T}.
+#' @param M.matrix (optional) a matrix to manually define M assumption. Default = \code{NULL} See details. .
+#' @param C.bounds (optional) a vector to manually define landings upper bounds; Default = \code{NULL}. See details.
+#' @param sdL  (optional) a positive scalar to  manually defined landings sd ; Default = \code{NULL}.
+#' @param d (optional) a vector to turn on/off d for use in \code{make.LI()}. Default = \code{NULL}.
+#'
+#'
+#'@details
+#'   \describe{
+#'     \item{\code{M.matrix}}{M.matrix has dimensions nrow=nyears and ncol=nages; M = 0.5 for ages 1-3, 0.3 for age 4 and 0.2 for ages 5+. }
+#'     \item{\code{M.split}}{if \code{TRUE}, \code{M.matrix = M.matrix + 0.33} for years 1989-1996.}
+#'     \item{\code{C.bounds}}{vector of length 3; Default \code{C.bounds = (2,1.2,1.5)} for high, low, and moderate uncertainty.}
+#'     \item{\code{sdL}}{default sd landings = 0.05}
+#'     \item{\code{d}}{Numeric vector of length(nyears*nages) of 0's. }}
+#'
+#'
+#' @examples
+#' \dontrun{
+#' tmb.data <- make.tmb.data()
+#'
+#' #model with no M split
+#' tmb.data.ns = make.tmb.data(M.split=FALSE)
+#' }
 #' @export
-#'
-#'
 make.tmb.data = function(do.retro=FALSE,retro.year=NULL,M.split=TRUE,M.matrix=NULL,
                          C.bounds=NULL,sdL=NULL,d=NULL){
 

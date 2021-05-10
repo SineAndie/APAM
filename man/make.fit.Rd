@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_fit.R
 \name{make.fit}
 \alias{make.fit}
-\title{Prepare parameters for APAM}
+\title{make.fit: fit APAM}
 \usage{
 make.fit(
   data,
@@ -16,22 +16,41 @@ make.fit(
 )
 }
 \arguments{
-\item{data}{input from make_tmb_data}
+\item{data}{object returned from \code{\link{make.tmb.data}}}
 
-\item{map}{input from make_map}
+\item{map}{object returned from \code{\link{make.map}}}
 
-\item{parameters}{input from make_parameters}
+\item{parameters}{object returned from \code{\link{make.parm}}}
 
-\item{do.sd}{get sdreport}
+\item{do.sd}{(optional) T/F, run sdreport? Default = \code{TRUE}.}
 
-\item{do.Zresid}{get Z residuals}
+\item{do.Zresid}{(optional) T/F, get adjusted residuals? Default = \code{TRUE}.}
 
-\item{do.NS}{run extra Newton steps (default 4)}
+\item{do.NS}{(optional) T/F, do extra Newton steps? Default = \code{TRUE}.}
 
-\item{do.hess}{calculate hessian}
+\item{do.hess}{(optional) calculate hessian? Default = \code{TRUE}.}
 
-\item{NS}{default 4 extra Newton step}
+\item{NS}{(optional) positive integer, set numer of Newton setps. Default = 4.}
+}
+\value{
+a fit TMB model with additional output:
+\describe{
+\item{\code{$obj}}{object from \code{TMB::MakeADFun}}
+\item{\code{$opt}}{results from \code{stats::nlminb}}
+\item{\code{$rep}}{report from \code{obj$report()} from \code{MakeADFun}}
+\item{\code{$sdrep}}{if \code{do.sd=T} returns sdreport from \code{MakeADFun}}
+\item{\code{$sdrep1}}{if \code{do.Zresid=T} returns sdreport from residuals from \code{MakeADFun}}
+\item{\code{$tmb.data}}{object from \code{\link{make.tmb.data} that was used in the model}}
+\item{\code{$map}}{object from \code{\link{make.map} that was used in the model}}
+\item{\code{$parameters}}{object from \code{\link{make.parm} that was used in the model}}
+\item{\code{$hess}}{if \code{do.hess=T} returns hessian}
+}
 }
 \description{
-Prepares parameters for use in APAM
+Fits American plaice assessment model (APAM).
+}
+\examples{
+\dontrun{
+fit <- make.fit(data, map, parameters)
+}
 }

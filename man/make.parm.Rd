@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_parm.R
 \name{make.parm}
 \alias{make.parm}
-\title{Prepare parms for APAM}
+\title{make.parm: prepares parameters for use in APAM}
 \usage{
 make.parm(
   data,
@@ -16,22 +16,80 @@ make.parm(
 )
 }
 \arguments{
-\item{data}{input from make_tmb_data}
+\item{data}{object returned from \code{\link{make.tmb.data}}}
 
-\item{map}{input from make_map}
+\item{map}{object returned from \code{\link{make.map}}}
 
-\item{parms}{can redefine starting parameter values}
+\item{parms}{(optional) list, can be used to change default starting parameters. See details.}
 
-\item{parmsL}{can redefine lower parameter bound}
+\item{parmsL}{(optional) list, can be used to change default parameter lower bounds. See details.}
 
-\item{parmsU}{can redefine upper parameter bound}
+\item{parmsU}{(optional) list, can be used to change default parameter upper bounds.. See details.}
 
-\item{no.pe}{turn on/off pe, i.e fix pe sd to 0.01}
+\item{no.pe}{(optional) if \code{no.pe=T} \code{\link{make.map}} set \code{TRUE} to fix \code{sdpe=0.01}}
 
-\item{no.logits}{turn on/off logits}
+\item{no.logits}{(optional) if \code{no.logits=T} \code{\link{make.map}} set \code{TRUE} to fix \code{logits}. See details.}
 
-\item{no.Flogits}{turn on/off Flogit estimation}
+\item{no.Flogits}{(optional) if \code{no.Flogits=T} \code{\link{make.map}} set \code{TRUE} to fix \code{Flogits}. See details.}
 }
 \description{
-Prepares parms for use in APAM
+Prepares parmameterss for use in APAM.
+}
+\details{
+\describe{
+\item{\code{parms}}{list that contains starting parameter values. Default \code{parm=}
+\itemize{
+\item \code{log_R=c(10,10),}
+\item \code{m_q=matrix(c(rep(log(0.1),t1),rep(-30,14-t1)),nrow=length(data$isurvey1), ncol = 14,byrow=T),}
+\item \code{log_cv_index=rep(0.5,length(unique(data$isd))),}
+\item \code{log_std_log_R=log(1),}
+\item \code{log_F_mean = matrix(log(0.1),nrow=Y,ncol=2,byrow=T),}
+\item \code{log_std_log_F = matrix(log(0.1),nrow=Y,ncol=A-4,byrow=T),}
+\item \code{log_std_pe = matrix(log(0.2),nrow=Y-1,ncol=A-1),}
+\item \code{log_std_crl = matrix(log(0.2),nrow=Y,ncol=A-5),}
+\item \code{logit_ar_index_age = rep(0,length(unique(data$isurvey1))),}
+\item \code{logit_ar_logF = c(0, 0, 0),}
+\item \code{logit_ar_crl = c(2.2,-10),}
+\item \code{logit_ar_pe = rep(-10,2),}
+\item \code{logit_ar_logRec = 0,}
+\item \code{log_F_devt=t(matrix(log(0.001),nrow=Y,ncol=A-4,byrow=T)}
+\item \code{log_Nt=t(matrix(log(10000),nrow=Y,ncol=A,byrow=T)),}
+\item \code{h=0}}}
+\item{\code{parmsL}}{list that contains starting parameter values. Default \code{parmL=}
+\itemize{
+\item \code{log_R=c(-10,-10),}
+\item \code{m_q=matrix(-30,nrow=length(data$isurvey1), ncol = A-1),}
+\item \code{log_cv_index=rep(log(0.001),length(unique(data$isd))),}
+\item \code{log_std_log_R=-10,}
+\item \code{log_F_mean = matrix(log(0.0001),nrow=Y,ncol=2,byrow=T),}
+\item \code{log_std_log_F =matrix(-Inf,nrow=Y,ncol=A-4,byrow=T),}
+\item \code{log_std_pe = matrix(log(0.001),nrow=Y-1,ncol=A-1),}
+\item \code{log_std_crl = matrix(log(0.001),nrow=Y,ncol=A-5),}
+\item \code{logit_ar_index_age = rep(-5,length(unique(data$isurvey1))),}
+\item \code{logit_ar_logF = rep(-5,3),}
+\item \code{logit_ar_crl = rep(-5,2),}
+\item \code{logit_ar_pe = rep(-5,2),}
+\item \code{logit_ar_logRec = -5}}}
+\item{\code{parmsu}}{list that contains starting parameter values. Default \code{parmU=}
+\itemize{
+\item \code{log_R=c(Inf,Inf),}
+\item \code{m_q=matrix(Inf,nrow=length(data$isurvey1), ncol = A-1),}
+\item \code{log_cv_index=rep(log(5),length(unique(data$isd))),}
+\item \code{log_std_log_R=Inf,}
+\item \code{log_F_mean = matrix(Inf,nrow=Y,ncol=2,byrow=T),}
+\item \code{log_std_log_F = matrix(Inf,nrow=Y,ncol=A-4,byrow=T),}
+\item \code{log_std_pe = matrix(10,nrow=Y-1,ncol=A-1),}
+\item \code{log_std_crl = matrix(5,nrow=Y,ncol=A-5),}
+\item \code{logit_ar_index_age = rep(5,length(unique(data$isurvey1))),}
+\item \code{logit_ar_logF = c(5,5,5),}
+\item \code{logit_ar_crl = c(5,5),}
+\item \code{logit_ar_pe = c(10,10),}
+\item \code{logit_ar_logRec = 5}}}
+\item{\code{no.logits }}{if \code{TRUE}, all survey logits = 0.73, all F logits = 0.95 and rec logit = 0.32 }
+\item{\code{no.Flogits}}{if \code{TRUE}, all F logits = 0.95}}
+}
+\examples{
+\dontrun{
+params <- make.parm(data,map)
+}
 }
