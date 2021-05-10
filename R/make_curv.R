@@ -29,10 +29,13 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
   n<- length(tmb_data$d)
 
   if(LocInf$type=="age"){if(is.null(pert)){pert<- c(1:A)}
-    all=FALSE}
+    all=FALSE
+    LI_full=LocInf$LI[,5]}
   if(LocInf$type=="year"){if(is.null(pert)){pert<- c(1:Y)}
-    all=FALSE}
-  if(LocInf$type=="all"){if(is.null(pert)){pert<-c(1:n)}}
+    all=FALSE
+    LI_full=LocInf$LI[,5]}
+  if(LocInf$type=="all"){if(is.null(pert)){pert<-c(1:n)
+  LI_full=LocInf$LI}}
 
   if(is.null(tol)){tol<-0.10}
 
