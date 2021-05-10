@@ -33,7 +33,7 @@ make.parm(
 \item{no.Flogits}{(optional) if \code{no.Flogits=T} \code{\link{make.map}} set \code{TRUE} to fix \code{Flogits}. See details.}
 }
 \description{
-Prepares parmameterss for use in APAM.
+Prepares parameters for use in APAM.
 }
 \details{
 \describe{
@@ -55,7 +55,7 @@ Prepares parmameterss for use in APAM.
 \item \code{log_F_devt=t(matrix(log(0.001),nrow=Y,ncol=A-4,byrow=T)}
 \item \code{log_Nt=t(matrix(log(10000),nrow=Y,ncol=A,byrow=T)),}
 \item \code{h=0}}}
-\item{\code{parmsL}}{list that contains starting parameter values. Default \code{parmL=}
+\item{\code{parmsL}}{list that contains default parameter lower bounds. Default \code{parmL=}
 \itemize{
 \item \code{log_R=c(-10,-10),}
 \item \code{m_q=matrix(-30,nrow=length(data$isurvey1), ncol = A-1),}
@@ -70,7 +70,7 @@ Prepares parmameterss for use in APAM.
 \item \code{logit_ar_crl = rep(-5,2),}
 \item \code{logit_ar_pe = rep(-5,2),}
 \item \code{logit_ar_logRec = -5}}}
-\item{\code{parmsu}}{list that contains starting parameter values. Default \code{parmU=}
+\item{\code{parmsu}}{list that contains default parameter upper bounds. Default \code{parmU=}
 \itemize{
 \item \code{log_R=c(Inf,Inf),}
 \item \code{m_q=matrix(Inf,nrow=length(data$isurvey1), ncol = A-1),}
@@ -85,8 +85,8 @@ Prepares parmameterss for use in APAM.
 \item \code{logit_ar_crl = c(5,5),}
 \item \code{logit_ar_pe = c(10,10),}
 \item \code{logit_ar_logRec = 5}}}
-\item{\code{no.logits }}{if \code{TRUE}, all survey logits = 0.73, all F logits = 0.95 and rec logit = 0.32 }
-\item{\code{no.Flogits}}{if \code{TRUE}, all F logits = 0.95}}
+\item{\code{no.logits }}{if \code{TRUE}, fixed all survey logits = 0.73, all F logits = 0.95 and rec logit = 0.32 }
+\item{\code{no.Flogits}}{if \code{TRUE}, fixed all F logits = 0.95}}
 }
 \examples{
 \dontrun{

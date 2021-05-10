@@ -44,7 +44,7 @@ Prepares map for use in APAM.
 \item{\code{crl.block}}{if \code{TRUE}, a separate crl sd is estimated pre/post 1993.}
 \item{\code{no.pe}}{if \code{TRUE}, sdpe is mapped out.}
 \item{\code{no.logits }}{if \code{TRUE}, all logit parameters are mapped out.}
-\item{\code{no.Flogits}}{if \code{TRUE}, all F logit parameters are mapped out mapped out. }}
+\item{\code{no.Flogits}}{if \code{TRUE}, all F logit parameters are mapped out. }}
 }
 \examples{
 \dontrun{

@@ -31,10 +31,10 @@ spawning stock biomass and population abundance)}
 }
 }
 \description{
-Plot outputs from APAM.
+Plots output from APAM.
 }
 \examples{
 \dontrun{
-plots<- make.plots(fit)
+plots<- make.plots(mfits)
 }
 }

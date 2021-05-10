@@ -21,7 +21,7 @@ make.tmb.data(
 
 \item{M.split}{(optional) T/F, turn on/off M increase for years 1989-1996? Default = \code{T}.}
 
-\item{M.matrix}{(optional) a matrix to manually define M assumption. Default = \code{NULL} See details. .}
+\item{M.matrix}{(optional) a matrix to manually define M assumption. Default = \code{NULL} See details.}
 
 \item{C.bounds}{(optional) a vector to manually define landings upper bounds; Default = \code{NULL}. See details.}
 

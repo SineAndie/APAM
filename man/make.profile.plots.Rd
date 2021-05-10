@@ -13,7 +13,7 @@ make.profile.plots(prof)
 a list containing all ggplots
 \describe{
 \item{\code{$nll_plot}}{profile likelihoods vs M perturbations}
-\item{\code{$nll_dev_plot}}{profile likelihoods deviations vs M perturbations}
+\item{\code{$nll_dev_plot}}{profile likelihood deviations vs M perturbations}
 }
 }
 \description{

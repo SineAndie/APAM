@@ -16,7 +16,7 @@ make.curv(mfits, LocInf, pert = NULL, tol = NULL)
 \item{tol}{to set curvature tolerance. Default \code{h=0.10}.}
 }
 \description{
-Calculates curvature for APAM for individual, age group and year group slopes for full model fit.
+Calculates curvature for APAM for individual, age group and year group perturbations for full model fit.
 Note that this functions currently does not calculate curvature for individual
 data components.
 }

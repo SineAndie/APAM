@@ -9,6 +9,12 @@ make.LI.plots(LocInf)
 \arguments{
 \item{LocInf}{object from \code{\link{make.LI}}}
 }
+\value{
+a list containing  ggplot
+\describe{
+\item{\code{$LI_plot}}{local influence plot}
+}
+}
 \description{
 Plot outputs from APAM local influence diagnostics.
 }
