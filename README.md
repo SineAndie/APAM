@@ -175,7 +175,8 @@ profile <- make.profile(fit)
 prof_plots <- make.profile.plots(profile)
 ```
 
-and local influence (LI) diagnostics:
+and local influence (LI) diagnostics. Note, in `make.fit`, make sure
+that `do.hess=T` or the LI diagnostics will return an error.
 
 ``` r
 #to calculate age group LI slopes for the full model and data components (takes approx 15 mins)
