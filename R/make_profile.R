@@ -61,7 +61,7 @@ make.profile = function(mfits, delta_M = NULL){
     params$parms$log_F_mean  <- matrix(log(0.1-(parm_F*delta_M[n])),nrow=tmb_data$Y,ncol=2,byrow=T)
 
     temp_obj <- TMB::MakeADFun(tmb_data,params$parms, map=mfits$map, random=mfits$obj$env$random,
-                          DLL = mfits$obj$env$DLL,control = list(trace=10,eval.max=2000,iter.max=1000),inner.control = list(maxit = 1000),silent = T)
+                               DLL = mfits$obj$env$DLL,control = list(trace=10,eval.max=2000,iter.max=1000),inner.control = list(maxit = 1000),silent = T)
 
     temp1<-temp_obj$fn(temp_obj$par)
     gr1<-max(abs(temp_obj$env$f(temp_obj$env$last.par, order=1)[temp_obj$env$random]))
@@ -70,8 +70,8 @@ make.profile = function(mfits, delta_M = NULL){
     while(gr1>1e-8){
 
       temp_obj <- TMB::MakeADFun(tmb_data,parameters=temp_obj$env$parList(), map=mfits$map,
-                            random=mfits$obj$env$random, DLL = mfits$obj$env$DLL,
-                            control = list(trace=10,eval.max=2000,iter.max=1000), inner.control = list(maxit = 1000),silent = T)
+                                 random=mfits$obj$env$random, DLL = mfits$obj$env$DLL,
+                                 control = list(trace=10,eval.max=2000,iter.max=1000), inner.control = list(maxit = 1000),silent = T)
 
       temp<-temp_obj$fn(temp_obj$par)
       gr1<-max(abs(temp_obj$env$f(temp_obj$env$last.par, order=1)[temp_obj$env$random]))
@@ -82,8 +82,8 @@ make.profile = function(mfits, delta_M = NULL){
       }}
 
     temp_opt <-stats::nlminb(temp_obj$par,temp_obj$fn,temp_obj$gr,
-                       upper=params$upper,lower=params$lower,
-                       control = list(trace=0,eval.max=2000,iter.max=1000))
+                             upper=params$upper,lower=params$lower,
+                             control = list(trace=0,eval.max=2000,iter.max=1000))
 
     gr2<-abs(max(temp_obj$gr(temp_opt$par)))
 
@@ -97,7 +97,6 @@ make.profile = function(mfits, delta_M = NULL){
     },error=function(e){no.gr2 <<- rbind(paste(n,conditionMessage(e),sep=":"),no.gr2)})
 
     gr2<-abs(max(temp_obj$gr(temp_opt$par)))
-
 
     conv_fit[1,n] <- gr1
     conv_fit[2,n] <- gr2
@@ -127,14 +126,18 @@ make.profile = function(mfits, delta_M = NULL){
       count=1
       dat$nll_wt[1:5] = 0
 
-      if(k==5){dat$nll_wt[k] = 1}
-      if(k==4){dat$nll_wt[c(1:3,5)] = 1}
-      if(k==3){dat$nll_wt[c(1:2,4:5)] = 1}
-      if(k==2){dat$nll_wt[c(1,3:5)] = 1}
-      if(k==1){dat$nll_wt[c(2:5)] = 1}
+      if(k==5){
+        dat$nll_wt[k] = 1
+      }else if(k==4){
+        dat$nll_wt[c(1:3,5)] = 1
+      }else if(k==3){
+        dat$nll_wt[c(1:2,4:5)] = 1
+      }else if(k==2){
+        dat$nll_wt[c(1,3:5)] = 1
+      }else{dat$nll_wt[c(2:5)] = 1}
 
       obj1 <- TMB::MakeADFun(dat, parameters=temp$obj$env$parList(temp$opt$par),map=temp$obj$env$map,random=temp$obj$env$random,
-                        DLL = temp$obj$env$DLL, silent = TRUE, inner.control = list(maxit = 1000))
+                             DLL = temp$obj$env$DLL, silent = TRUE, inner.control = list(maxit = 1000))
 
       t2<-obj1$fn(obj1$par)
       gr3<-max(abs(obj1$env$f(obj1$env$last.par, order=1)[obj1$env$random]))
@@ -142,7 +145,7 @@ make.profile = function(mfits, delta_M = NULL){
       while(gr3>1e-8){
 
         obj1 <- TMB::MakeADFun(dat,parameters=obj1$env$parList(), map=temp$obj$env$map,random=temp$obj$env$random,
-                          DLL = temp$obj$env$DLL, silent = TRUE, inner.control = list(maxit = 1000))
+                               DLL = temp$obj$env$DLL, silent = TRUE, inner.control = list(maxit = 1000))
 
         t2<- obj1$fn(obj1$par)
         gr3<-max(abs(obj1$env$f(obj1$env$last.par, order=1)[obj1$env$random]))
@@ -153,12 +156,12 @@ make.profile = function(mfits, delta_M = NULL){
         }}
 
       opt1 <- stats::nlminb(obj1$par,obj1$fn,obj1$gr,
-                     upper=params$upper,lower=params$lower,
-                     control = list(trace=0,eval.max=2000,iter.max=1000))
+                            upper=params$upper,lower=params$lower,
+                            control = list(trace=0,eval.max=2000,iter.max=1000))
 
       if(k<5){nllc[1,k] = temp$opt$objective - obj1$fn(obj1$par)
-      nllr[1,k] =  temp$opt$objective - obj1$fn(opt1$par)}
-      if(k==5){nllm<-obj1$fn(obj1$par)}
+      nllr[1,k] =  temp$opt$objective - obj1$fn(opt1$par)
+      }else{nllm<-obj1$fn(obj1$par)}
 
 
     }
@@ -166,26 +169,23 @@ make.profile = function(mfits, delta_M = NULL){
     nllr[1,5] =  temp$opt$objective
     nllc[1,5] = temp$opt$objective
 
-    names(nllr) = c("Fall index","Spring index","Spanish index","Landings","Total")
-    names(nllc) = names(nllr)
-    names(nllm) = "Age comps"
-
     remain_prof[,j] = nllr
     cond_prof[,j] = nllc
     marg_prof[,j] = nllm
 
   }
-  rownames(remain_prof) = c(names(nllc))
+
+  rownames(remain_prof) = c("Fall index","Spring index","Spanish index","Landings","Total")
   colnames(remain_prof) = as.character(delta_M)
 
-  rownames(cond_prof) = c(names(nllc))
+  rownames(cond_prof) = c("Fall index","Spring index","Spanish index","Landings","Total")
   colnames(cond_prof) = as.character(delta_M)
 
-  rownames(marg_prof) = c(names(nllm))
+  rownames(marg_prof) = "Age comps"
   colnames(marg_prof) = as.character(delta_M)
 
   rownames(joint_res) = c("Fall index","Spring index","Spanish index","Landings","Age comps", "Recs","F", "PE")
-  colnames(marg_prof) = as.character(delta_M)
+  colnames(joint_res) = as.character(delta_M)
 
   remain_prof_dev = t(apply(remain_prof,1,function(x){x-min(x,na.rm=T)}))
   cond_prof_dev = t(apply(cond_prof,1,function(x){x-min(x,na.rm=T)}))
@@ -198,4 +198,3 @@ make.profile = function(mfits, delta_M = NULL){
                  conv_fit = t(conv_fit), no.gr2=no.gr2)
   return(results)
 }
-
