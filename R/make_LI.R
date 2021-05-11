@@ -178,7 +178,7 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
     }
 
-    return(results = list(LI= Si, type = type))
+    return(results = list(LI= unlist(Si), type = type))
   }else if(age){
 
     dFtimeFn = function(num){
