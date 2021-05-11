@@ -158,7 +158,7 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
         logit_ar_pe = factor(rep(NA,2)),
         logit_ar_logRec = factor(NA),
         resid_index_res = factor(rep(NA, length(tmb_data$index))),
-        resid_crl_res = factor(matrix(NA, nrow = 58, ncol = 10))
+        resid_crl_res = factor(matrix(NA, nrow = Y, ncol = A-5))
       )
 
       obj2 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),map2,
@@ -225,7 +225,7 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
           logit_ar_pe = factor(rep(NA,2)),
           logit_ar_logRec = factor(NA),
           resid_index_res = factor(rep(NA, length(tmb_data$index))),
-          resid_crl_res = factor(matrix(NA, nrow = 58, ncol = 10))
+          resid_crl_res = factor(matrix(NA, nrow = Y, ncol = A-5))
         )
 
         obj2 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),map2,
@@ -247,27 +247,26 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
     }
     LI[,1:3] = LI_temp[,5] - LI_temp[,1:3]
     LI[,4:5] = LI_temp[,4:5]
-    return(results = list(LI=LI, type = type))}
-  else{
-    for(i in 1:length(tmb_data$nll_wt)){
+    return(results = list(LI=LI, type = type))}else{
+      for(i in 1:length(tmb_data$nll_wt)){
 
-      dFtimeFn = function(num){
-        return(numDeriv::jacobian(dFgrad_dtheta_year,0,,,,num,mfits))
-      }
+        dFtimeFn = function(num){
+          return(numDeriv::jacobian(dFgrad_dtheta_year,0,,,,num,mfits))
+        }
 
-      tmb_data$nll_wt = rep(1,5)
+        tmb_data$nll_wt = rep(1,5)
 
-      if(i<3){  tmb_data$nll_wt[i]=0}
+        if(i<3){tmb_data$nll_wt[i]=0}
 
-      if(i==3){  tmb_data$nll_wt[i+1]=0}
+        if(i==3){ tmb_data$nll_wt[i+1]=0}
 
-      if(i==4){ tmb_data$nll_wt = rep(0,5)
-      tmb_data$nll_wt[i+1]=1}
+        if(i==4){tmb_data$nll_wt = rep(0,5)
+        tmb_data$nll_wt[i+1]=1}
 
-      #containers
-      Si = vector("list", length(pert))
+        #containers
+        Si = vector("list", length(pert))
 
-      for(j in 1:length(pert)){
+        for(j in 1:length(pert)){
 
           tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
           tmb_data$d <- as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
@@ -275,47 +274,45 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
           tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)
 
-        Del <- t(sapply(pert[j],dFtimeFn))
+          Del <- t(sapply(pert[j],dFtimeFn))
 
-        #dg_dw
-        map2 <- list(
-          log_R=factor(c(NA,NA)),
-          m_q=factor(matrix(NA,nrow=length(tmb_data$isurvey1), ncol = 14,byrow=TRUE)),
-          log_cv_index=factor(rep(NA,n.survey.sd)),
-          log_std_log_R=factor(NA),
-          log_F_mean = factor(matrix(NA,nrow=Y,ncol=2,byrow=T)),
-          log_std_log_F = factor(matrix(NA,nrow=Y,ncol=A-4,byrow=T)),
-          log_std_pe = factor(matrix(NA,nrow=Y-1,ncol=A-1)),
-          log_std_crl = factor(matrix(NA,nrow=Y,ncol=A-5)),
-          logit_ar_index_age = factor(rep(NA,length(unique(tmb_data$isurvey)))),
-          logit_ar_logF = factor(c(NA, NA, NA)),
-          logit_ar_crl = factor(c(NA,NA)),
-          logit_ar_pe = factor(rep(NA,2)),
-          logit_ar_logRec = factor(NA),
-          resid_index_res = factor(rep(NA, length(tmb_data$index))),
-          resid_crl_res = factor(matrix(NA, nrow = 58, ncol = 10))
-        )
+          #dg_dw
+          map2 <- list(
+            log_R=factor(c(NA,NA)),
+            m_q=factor(matrix(NA,nrow=length(tmb_data$isurvey1), ncol = 14,byrow=TRUE)),
+            log_cv_index=factor(rep(NA,n.survey.sd)),
+            log_std_log_R=factor(NA),
+            log_F_mean = factor(matrix(NA,nrow=Y,ncol=2,byrow=T)),
+            log_std_log_F = factor(matrix(NA,nrow=Y,ncol=A-4,byrow=T)),
+            log_std_pe = factor(matrix(NA,nrow=Y-1,ncol=A-1)),
+            log_std_crl = factor(matrix(NA,nrow=Y,ncol=A-5)),
+            logit_ar_index_age = factor(rep(NA,length(unique(tmb_data$isurvey)))),
+            logit_ar_logF = factor(c(NA, NA, NA)),
+            logit_ar_crl = factor(c(NA,NA)),
+            logit_ar_pe = factor(rep(NA,2)),
+            logit_ar_logRec = factor(NA),
+            resid_index_res = factor(rep(NA, length(tmb_data$index))),
+            resid_crl_res = factor(matrix(NA, nrow = Y, ncol = A-5))
+          )
 
-        obj2 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),map2,
-                               random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
+          obj2 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),map2,
+                                 random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
 
-        dg_dw <- as.matrix(obj2$gr())
+          dg_dw <- as.matrix(obj2$gr())
 
-        #dg_dtheta
-        obj3 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),mfits$map,
-                               random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
+          #dg_dtheta
+          obj3 <- TMB::MakeADFun(tmb_data, mfits$obj$env$parList(mfits$opt$par),mfits$map,
+                                 random=c("log_F_devt","log_Nt"), DLL = mfits$obj$env$DLL,silent=T)
 
-        dg_dtheta <- as.matrix(obj3$gr())
+          dg_dtheta <- as.matrix(obj3$gr())
 
-        #results
-        Si[[j]] <- dg_dw - Del%*%solve(mfits$hess)%*%dg_dtheta
+          #results
+          Si[[j]] <- dg_dw - Del%*%solve(mfits$hess)%*%dg_dtheta
 
+        }
+        LI_temp[,i] <- unlist(Si)
       }
-      LI_temp[,i] <- unlist(Si)
-    }
-    LI[,1:3] = LI_temp[,5] - LI_temp[,1:3]
-    LI[,4:5] = LI_temp[,4:5]
-    return(results = list(LI=LI, type = type))}
+      LI[,1:3] = LI_temp[,5] - LI_temp[,1:3]
+      LI[,4:5] = LI_temp[,4:5]
+      return(results = list(LI=LI, type = type))}
 }
-
-
