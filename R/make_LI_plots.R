@@ -51,7 +51,7 @@
     Si_dat$colr = 'deepskyblue'
     Si_dat$colr[Si_dat$value>0]='firebrick2'
 
-    Si_plot = Si_dat%>%ggplot(aes(x= .data$Var1, y = .data$Var2,size=abs(.data$index),color=.data$colr)) +
+    Si_plot = Si_dat%>%ggplot(aes(x= .data$Var1, y = .data$Var2,size=abs(.data$value),color=.data$colr)) +
       geom_point(shape = 20, alpha = 0.7)+
       ggplot2::scale_size(range = c(0,15))+
       scale_x_continuous(breaks = seq(1960,2018,5))+
