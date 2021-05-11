@@ -22,11 +22,8 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
   par$parms <- mfits$obj$env$parList(mfits$opt$par)
   full<- gfunc(0,mfits$opt$par,mfits)
 
-  Aname = c(1:15)
-  Yname = c(1960:2017)
   Y=tmb_data$Y
   A=tmb_data$A
-  n<- length(tmb_data$d)
 
   if(LocInf$type=="age"){if(is.null(pert)){pert<- c(1:A)}
     all=FALSE
@@ -34,8 +31,8 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
   if(LocInf$type=="year"){if(is.null(pert)){pert<- c(1:Y)}
     all=FALSE
     LI_full=LocInf$LI[,5]}
-  if(LocInf$type=="all"){if(is.null(pert)){pert<-c(1:n)
-  LI_full=LocInf$LI}}
+  if(LocInf$type=="all"){if(is.null(pert)){pert<-c(1:length(tmb_data$d))}
+    LI_full=LocInf$LI}
 
   if(is.null(tol)){tol<-0.10}
 
@@ -44,22 +41,20 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
   for(j in 1:length(pert)){
 
     if(LocInf$type=="all"){
+
       tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-      tmb_data$d[pert[j]] = 1}
+      tmb_data$d[pert[j]] = 1}else if(LocInf$type=="age"){
 
-    if(LocInf$type=="age"){
-      tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
-      tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-      tmat[,pert[j]] = 1
+        tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
+        tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
+        tmat[,pert[j]] = 1
 
-      tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}
+        tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}else{
+          tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
+          tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
+          tmat[pert[j],] = 1
 
-    if(LocInf$type=="year"){
-      tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
-      tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-      tmat[pert[j],] = 1
-
-      tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}
+          tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}
 
     par$parms$h <- 2*tol
 
@@ -81,12 +76,11 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
 
     dg2_dh <- temp1/(12*tol^2)
 
-    temp2<- (1+(as.numeric(LI_full[j]))^2)^(3/2)
+    temp2<- (1+(as.numeric(LI_full[pert[j]]))^2)^(3/2)
 
     tempc <- dg2_dh/temp2
     curv[j]=tempc
   }
   Curvature<- list(curv=curv)
-
   return(Curvature)
 }
