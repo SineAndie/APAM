@@ -81,7 +81,7 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
 
     dg2_dh <- temp1/(12*tol^2)
 
-    temp2<- (1+(as.numeric(LocInf$LI[j,5]))^2)^(3/2)
+    temp2<- (1+(as.numeric(LI_full[j]))^2)^(3/2)
 
     tempc <- dg2_dh/temp2
     curv[j]=tempc
