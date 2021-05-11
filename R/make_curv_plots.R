@@ -15,7 +15,7 @@
 #' curv.plots <- make.curv.plots(mfits, curv)
 #' }
 #' @export
-make.curv.plot = function(LocInf,curv){
+make.curv.plots = function(LocInf,curv){
 
   LI_dat= reshape2::melt(as.matrix(LocInf$LI[,5]))
   LI_dat$curv = unlist(curv$curv)
