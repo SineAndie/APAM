@@ -213,7 +213,7 @@ curv_age <- make.curv(fit,LI_age, age = T)
 curv_age_plot <- make.curv.plots(curv_age)
 ```
 
-## How to quiet RcppeEigen warnings
+## How to quiet RcppEigen warnings
 
 Note: this is the workaround that has worked for me on *Windows*, but am
 open to any advice on more efficient/better methods.
@@ -226,9 +226,3 @@ open to any advice on more efficient/better methods.
 3.  create a text file in the .R folder called `Makevars.win`
 4.  in `Makevars.win` write`CXXFLAGS = -Wno-ignored-attributes`
 5.  save and install package - most warnings should be quiet now!
-
-``` r
-#note this may produce warnings from RcppEigen, but does not affect model fitting/results
-#see note at end of document on how to quiet warnings if wanted 
-devtools::install_github("SineAndie/APAM", dependencies=TRUE)
-```
