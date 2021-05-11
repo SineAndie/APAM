@@ -25,10 +25,9 @@ Imports:
     stats,
     numDeriv,
     ggplot2,
-    patchwork,
     reshape2,
-    stringr,
-    cowplot
+    cowplot,
+    stringr
 Remotes: 
     kaskr/adcomp/TMB
 LinkingTo: 
