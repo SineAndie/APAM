@@ -107,7 +107,6 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
   tmb_data <- mfits$tmb.data
 
-  n <- length(tmb_data$d)
   n.survey.sd <- length(unique(tmb_data$isd))
   Y<-tmb_data$Y
   A <- tmb_data$A
@@ -119,7 +118,7 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
   if(year){if(is.null(pert)){pert <- c(1:Y)}
     all=FALSE
     type='year'}
-  if(all){if(is.null(pert)){pert <-c(1:n)}
+  if(all){if(is.null(pert)){pert <-c(1:length(tmb_data$d))}
     type="all"}
 
   LI_temp<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
@@ -179,7 +178,7 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
     }
 
-    return(results = list(LI=   Si, type = type))
+    return(results = list(LI= Si, type = type))
   }else if(age){
 
     dFtimeFn = function(num){
@@ -190,11 +189,11 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
 
       tmb_data$nll_wt = rep(1,5)
 
-      if(i<3){  tmb_data$nll_wt[i]=0}
+      if(i<3){tmb_data$nll_wt[i]=0}
 
-      if(i==3){  tmb_data$nll_wt[i+1]=0}
+      if(i==3){tmb_data$nll_wt[i+1]=0}
 
-      if(i==4){ tmb_data$nll_wt = rep(0,5)
+      if(i==4){tmb_data$nll_wt = rep(0,5)
       tmb_data$nll_wt[i+1]=1}
 
       #containers
