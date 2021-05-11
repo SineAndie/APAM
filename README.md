@@ -188,25 +188,26 @@ LI_age <- make.LI(fit, age = T)
 LI_age_plot <- make.LI.plots(LI_age)
 
 #to calculate year group LI slopes (takes approx 1 hr)
-LI_age <- make.LI(fit, age = T)
+LI_year <- make.LI(fit, year = T)
 
 #plot the results
-LI_age_plot <- make.LI.plots(LI_age)
+LI_year_plot <- make.LI.plots(LI_year)
 
 #to get individual age and year LI slopes.
 #note: for now this only returns the influence slopes from the full model fit (not data components since 
-#the run time is quite long; takes 4 hrs to run)
+#the run time is quite long; takes approx 2 hrs to run full model)
 LI <- make.LI(fit)
 
 LI_plot <- make.LI.plots(LI)
 ```
 
-Can also check the curvature. Note, we show for the age groups below but
-similar for year group perturbations (takes approx xx hrs) and
-individual perturbations (takes approx xx hrs).
+Can also check the curvature to assess the suitability on the local
+influence diagnostics. Note, we show the code for the age groups below
+but similar for year group perturbations (takes approx 1.2 hrs) and
+individual perturbations (takes approx 4 hrs).
 
 ``` r
-#check curvature (takes approx 30 mins to run)
+#check curvature (takes approx 20 mins to run)
 curv_age <- make.curv(fit,LI_age, age = T)
 
 #plot the results
