@@ -1,7 +1,6 @@
 #' make.fit: fit APAM
 #'
 #' Fits American plaice assessment model (APAM).
-#'@useDynLib APAM
 #'
 #' @param data object returned from \code{\link{make.tmb.data}}
 #' @param map object returned from \code{\link{make.map}}
