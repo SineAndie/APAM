@@ -17,7 +17,11 @@
 #' @export
 make.curv.plots = function(LocInf,curv){
 
-  LI_dat= reshape2::melt(as.matrix(LocInf$LI[,5]))
+  if(LocInf$type=="all"){
+    LI_dat= reshape2::melt(as.matrix(LocInf$LI))
+  }else{
+   LI_dat= reshape2::melt(as.matrix(LocInf$LI[,5]))
+    }
   LI_dat$curv = unlist(curv$curv)
 
   cur_vs_LI <-  LI_dat %>% ggplot( aes(x=.data$curv, y=.data$value))+
