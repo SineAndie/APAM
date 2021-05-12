@@ -47,7 +47,7 @@ Notes on how to modify inputs and model formulation are detailed in the next sec
 library(APAM)
 ```
 
-```{r fitmodel, cache=T}
+```{r fitmodel}
 #read in data and structure for use in APAM
 tmb.data<-make.tmb.data()
 
@@ -98,7 +98,7 @@ tmb.data_newM <- make.tmb.data(M.matrix = M.matrix)
 
 Additionally, the process errors can be turned on/off through the `make.map` and `make.parm` functions.
 
-```{r nope, cache=T}
+```{r nope}
 pmap2<-make.map(tmb.data,no.pe = TRUE)
 params2<-make.parm(tmb.data, pmap2, no.pe = TRUE)
 
