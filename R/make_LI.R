@@ -121,9 +121,9 @@ make.LI = function(mfits,pert=NULL,all=TRUE,age=FALSE,year=FALSE){
   if(all){if(is.null(pert)){pert <-c(1:length(tmb_data$d))}
     type="all"}
 
-  LI_temp<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
+  LI_temp<-matrix(NA_real_, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
 
-  LI<-matrix(NA, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
+  LI<-matrix(NA_real_, nrow = length(pert), ncol = (length(tmb_data$nll_wt)))
   colnames(LI) <- c("Fall", "Spring","Landings","Age Comps","Full")
   rownames(LI) <- pert
 
