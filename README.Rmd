@@ -147,7 +147,7 @@ pmap3<-make.map(tmb.data, setmap=setmap)
 
 We can also run the natural mortality diagnostics from Perreault & Cadigan (2021, in review). To get profile likelihoods:
 ```{r proflike, eval = F}
-#to calculate profile likelihoods (takes approx 1hr)
+#to calculate profile likelihoods (takes approx 2 hrs)
 profile <- make.profile(fit)
 
 #to plot profile likelihood results 
@@ -162,7 +162,7 @@ LI_age <- make.LI(fit, age = T)
 #plot the results
 LI_age_plot <- make.LI.plots(LI_age)
 
-#to calculate year group LI slopes (takes approx 1 hr)
+#to calculate year group LI slopes (takes approx 45 mins)
 LI_year <- make.LI(fit, year = T)
 
 #plot the results
