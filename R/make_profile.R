@@ -48,7 +48,7 @@ make.profile = function(mfits, delta_M = NULL){
   no.gr2=NULL
   no.gr3=NULL
 
-  joint_res = matrix(NA, nrow = 8, ncol=ndel)
+  joint_res = matrix(NA_real_, nrow = 8, ncol=ndel)
 
   for(n in 1:ndel){
 
@@ -108,18 +108,18 @@ make.profile = function(mfits, delta_M = NULL){
     joint_res[,n] = rep$jnll
   }
 
-  remain_prof = matrix(NA,nrow=5,ncol=ndel)
-  cond_prof = matrix(NA,nrow=5,ncol=ndel)
-  marg_prof = matrix(NA,nrow=1,ncol=ndel)
+  remain_prof = matrix(NA_real_,nrow=5,ncol=ndel)
+  cond_prof = matrix(NA_real_,nrow=5,ncol=ndel)
+  marg_prof = matrix(NA_real_,nrow=1,ncol=ndel)
 
   for(j in 1:ndel){
 
     NS=1
     temp <- prof_fit[[j]]
     dat <- temp$obj$env$data
-    nllr <- matrix(NA,1,5)
-    nllc <- matrix(NA,1,5)
-    nllm <-matrix(NA,1,1)
+    nllr <- matrix(NA_real_,1,5)
+    nllc <- matrix(NA_real_,1,5)
+    nllm <-matrix(NA_real_,1,1)
 
     for(k in 5:1){
 
