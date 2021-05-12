@@ -25,62 +25,125 @@ make.curv = function(mfits,LocInf,pert=NULL,tol = NULL){
   Y=tmb_data$Y
   A=tmb_data$A
 
-  if(LocInf$type=="age"){if(is.null(pert)){pert<- c(1:A)}
-    all=FALSE
-    LI_full=LocInf$LI[,5]}
-  if(LocInf$type=="year"){if(is.null(pert)){pert<- c(1:Y)}
-    all=FALSE
-    LI_full=LocInf$LI[,5]}
-  if(LocInf$type=="all"){if(is.null(pert)){pert<-c(1:length(tmb_data$d))}
-    LI_full=LocInf$LI}
+  curv = vector("list", length(pert))
 
   if(is.null(tol)){tol<-0.10}
 
-  curv = vector("list", length(pert))
+  if(LocInf$type=="age"){
+    if(is.null(pert)){pert<- c(1:A)}
+    all=FALSE
+    LI_full=LocInf$LI[,5]
 
-  for(j in 1:length(pert)){
+    for(j in 1:length(pert)){
 
-    if(LocInf$type=="all"){
+      tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
+      tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
+      tmat[,pert[j]] = 1
+
+      tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)
+
+      par$parms$h <- 2*tol
+
+      gmax1<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- tol
+
+      gmax2<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- -tol
+
+      gmin1 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- -2*tol
+
+      gmin2 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      temp1<- -gmax1$obj$fn(gmax1$opt$par) + 16*gmax2$obj$fn(gmax2$opt$par)  - 30*full + 16*gmin1$obj$fn(gmin1$opt$par) - gmin2$obj$fn(gmin2$opt$par)
+
+      dg2_dh <- temp1/(12*tol^2)
+
+      temp2<- (1+(as.numeric(LI_full[pert[j]]))^2)^(3/2)
+
+      tempc <- dg2_dh/temp2
+      curv[j]=tempc
+    }
+    Curvature<- list(curv=curv)
+    return(Curvature)
+
+  }else if(LocInf$type=="year"){
+      if(is.null(pert)){pert<- c(1:Y)}
+      all=FALSE
+      LI_full=LocInf$LI[,5]
+
+    for(j in 1:length(pert)){
+
+      tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
+      tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
+      tmat[pert[j],] = 1
+
+      tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)
+
+      par$parms$h <- 2*tol
+
+      gmax1<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- tol
+
+      gmax2<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- -tol
+
+      gmin1 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      par$parms$h <- -2*tol
+
+      gmin2 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+
+      temp1<- -gmax1$obj$fn(gmax1$opt$par) + 16*gmax2$obj$fn(gmax2$opt$par)  - 30*full + 16*gmin1$obj$fn(gmin1$opt$par) - gmin2$obj$fn(gmin2$opt$par)
+
+      dg2_dh <- temp1/(12*tol^2)
+
+      temp2<- (1+(as.numeric(LI_full[pert[j]]))^2)^(3/2)
+
+      tempc <- dg2_dh/temp2
+      curv[j]=tempc
+    }
+    Curvature<- list(curv=curv)
+    return(Curvature)
+  }else{
+      if(is.null(pert)){pert<-c(1:length(tmb_data$d))}
+      LI_full=LocInf$LI
+
+    for(j in 1:length(pert)){
 
       tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-      tmb_data$d[pert[j]] = 1}else if(LocInf$type=="age"){
+      tmb_data$d[pert[j]] = 1
 
-        tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
-        tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-        tmat[,pert[j]] = 1
+      par$parms$h <- 2*tol
 
-        tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}else{
-          tmat <- matrix(0, nrow=Y, ncol=A,byrow=T)
-          tmb_data$d = as.vector(matrix(0, nrow=Y, ncol=A,byrow=T))
-          tmat[pert[j],] = 1
+      gmax1<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-          tmb_data$d <- matrix(tmat, nrow=Y, ncol=A,byrow=F)}
+      par$parms$h <- tol
 
-    par$parms$h <- 2*tol
+      gmax2<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    gmax1<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+      par$parms$h <- -tol
 
-    par$parms$h <- tol
+      gmin1 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    gmax2<-make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+      par$parms$h <- -2*tol
 
-    par$parms$h <- -tol
+      gmin2 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
 
-    gmin1 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+      temp1<- -gmax1$obj$fn(gmax1$opt$par) + 16*gmax2$obj$fn(gmax2$opt$par)  - 30*full + 16*gmin1$obj$fn(gmin1$opt$par) - gmin2$obj$fn(gmin2$opt$par)
 
-    par$parms$h <- -2*tol
+      dg2_dh <- temp1/(12*tol^2)
 
-    gmin2 <- make.fit(tmb_data,mfits$map,par,do.hess=F, do.sd = F,do.Zresid = F, do.NS = F)
+      temp2<- (1+(as.numeric(LI_full[pert[j]]))^2)^(3/2)
 
-    temp1<- -gmax1$obj$fn(gmax1$opt$par) + 16*gmax2$obj$fn(gmax2$opt$par)  - 30*full + 16*gmin1$obj$fn(gmin1$opt$par) - gmin2$obj$fn(gmin2$opt$par)
-
-    dg2_dh <- temp1/(12*tol^2)
-
-    temp2<- (1+(as.numeric(LI_full[pert[j]]))^2)^(3/2)
-
-    tempc <- dg2_dh/temp2
-    curv[j]=tempc
-  }
-  Curvature<- list(curv=curv)
-  return(Curvature)
+      tempc <- dg2_dh/temp2
+      curv[j]=tempc
+    }
+    Curvature<- list(curv=curv)
+    return(Curvature)}
 }
