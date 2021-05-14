@@ -204,7 +204,7 @@ LI_plot <- make.LI.plots(LI)
 Can also check the curvature to assess the suitability on the local
 influence diagnostics. Note, we show the code for the age groups below
 but similar for year group perturbations (takes approx 1.2 hrs) and
-individual perturbations (takes approx 4 hrs).
+individual perturbations (takes approx 14 hrs).
 
 ``` r
 #check curvature (takes approx 20 mins to run)
