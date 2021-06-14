@@ -38,14 +38,9 @@ make.fit = function(data,map,parameters,do.sd=TRUE,do.Zresid=TRUE,do.NS=TRUE,do.
                    DLL = "APAM",
                    control = list(trace=10,eval.max=2000,iter.max=1000), silent = TRUE)
 
-  opt1 <- stats::nlminb(obj$par,obj$fn,obj$gr,
+  opt <- stats::nlminb(obj$par,obj$fn,obj$gr,
                  upper=parameters$upper,lower=parameters$lower,
                  control = list(trace=0,eval.max=2000,iter.max=1000))
-
-
-  opt <- stats::nlminb(opt1$par,obj$fn,obj$gr,
-                upper=parameters$upper,lower=parameters$lower,
-                control = list(trace=0,eval.max=2000,iter.max=1000))
 
   #take a few extra newton steps
   if(do.NS){ newtonsteps <- NS
